@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/distribution-tech/main/json-schema/distribution-tech-campaign-input-schema.json",
+  "title": "CampaignInput",
+  "description": "Left out, audience and company come from your company context (the audience your website read found; with no website read yet, send audience), geography is worldwide and desired_outcome is the goal's usual outcome; the answer's defaults names each field filled. A 422 names every required field that is missing, each in details.problems.",
+  "x-generated": "2026-10-22",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/distribution-tech-openapi.json#/components/schemas/CampaignInput",
+  "type": "object",
+  "required": [
+    "goal",
+    "product",
+    "moment",
+    "window_start",
+    "window_end",
+    "budget_usd"
+  ],
+  "properties": {
+    "goal": {
+      "type": "string",
+      "enum": [
+        "launch",
+        "funding",
+        "feature",
+        "program"
+      ]
+    },
+    "product": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "moment": {
+      "type": "string",
+      "maxLength": 2000,
+      "description": "What goes live and when."
+    },
+    "audience": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 2000
+    },
+    "geography": {
+      "type": "string",
+      "maxLength": 300
+    },
+    "window_start": {
+      "type": "string",
+      "format": "date"
+    },
+    "window_end": {
+      "type": "string",
+      "format": "date"
+    },
+    "budget_usd": {
+      "type": "integer",
+      "minimum": 10,
+      "description": "The most to spend, in US dollars. The plan is held to this key's mandate: never above its maximum plan total or what is left of its monthly cap."
+    },
+    "budget_min_usd": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The least to spend. Above the mandate's maximum plan total, or what is left of its monthly cap, the campaign is refused (mandate_refused). Left out, the budget is held to the mandate instead of refused."
+    },
+    "desired_outcome": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 2000
+    },
+    "company": {
+      "type": "string",
+      "maxLength": 300
+    },
+    "constraints": {
+      "type": "string",
+      "maxLength": 2000
+    }
+  }
+}

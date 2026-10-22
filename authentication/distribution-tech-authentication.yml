@@ -1,0 +1,19 @@
+generated: '2026-10-22'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://distribution.tech/docs/api/authentication
+sources:
+- https://distribution.tech/docs/api/authentication
+- https://distribution.tech/docs/api/authentication.md
+- https://distribution.tech/docs/quickstart
+- https://distribution.tech/docs
+description: Authentication schemes for distribution-tech API
+schemes:
+- type: http-bearer
+  name: Bearer
+  evidence: Every API and MCP call sends an API key from Developers as a Bearer token.
+  location: header
+  header: Authorization
+  how_to_obtain: Keys are created, rotated and revoked in your workspace under Developers. A key is shown once when it is created; the workspace
+    keeps only its prefix.
+docs: https://distribution.tech/docs/api/authentication

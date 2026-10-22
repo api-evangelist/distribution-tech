@@ -1,0 +1,806 @@
+{
+  "@context": {
+    "@vocab": "https://distribution.tech/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "distribution": "https://distribution.tech/schema#",
+    "Error": "distribution:Error",
+    "error": {
+      "@id": "distribution:error"
+    },
+    "ChannelFit": "distribution:ChannelFit",
+    "channel": {
+      "@id": "distribution:channel",
+      "@type": "xsd:string"
+    },
+    "label": {
+      "@id": "distribution:label",
+      "@type": "xsd:string"
+    },
+    "sale": {
+      "@id": "distribution:sale",
+      "@type": "xsd:string"
+    },
+    "level": {
+      "@id": "distribution:level",
+      "@type": "xsd:string"
+    },
+    "verified_nodes": {
+      "@id": "distribution:verified_nodes",
+      "@type": "xsd:integer"
+    },
+    "bookable_nodes": {
+      "@id": "distribution:bookable_nodes",
+      "@type": "xsd:integer"
+    },
+    "priced_units": {
+      "@id": "distribution:priced_units",
+      "@type": "xsd:integer"
+    },
+    "note": {
+      "@id": "distribution:note",
+      "@type": "xsd:string"
+    },
+    "Segment": "distribution:Segment",
+    "id": {
+      "@id": "distribution:id",
+      "@type": "xsd:string"
+    },
+    "Inventory": "distribution:Inventory",
+    "segments": {
+      "@id": "distribution:segments",
+      "@container": "@list"
+    },
+    "unresolved": {
+      "@id": "distribution:unresolved",
+      "@type": "xsd:boolean"
+    },
+    "coverage_as_of": {
+      "@id": "distribution:coverage_as_of",
+      "@type": "xsd:dateTime"
+    },
+    "channels": {
+      "@id": "distribution:channels",
+      "@container": "@list"
+    },
+    "AudienceFit": "distribution:AudienceFit",
+    "version": {
+      "@id": "distribution:version"
+    },
+    "computed_at": {
+      "@id": "distribution:computed_at",
+      "@type": "xsd:dateTime"
+    },
+    "regions": {
+      "@id": "distribution:regions",
+      "@container": "@list"
+    },
+    "thin": {
+      "@id": "distribution:thin",
+      "@type": "xsd:boolean"
+    },
+    "summary": {
+      "@id": "distribution:summary",
+      "@type": "xsd:string"
+    },
+    "CampaignSummary": "distribution:CampaignSummary",
+    "display_name": {
+      "@id": "distribution:display_name",
+      "@type": "xsd:string"
+    },
+    "company": {
+      "@id": "distribution:company",
+      "@type": "xsd:string"
+    },
+    "product": {
+      "@id": "distribution:product",
+      "@type": "xsd:string"
+    },
+    "objective": {
+      "@id": "distribution:objective",
+      "@type": "xsd:string"
+    },
+    "created_at": {
+      "@id": "distribution:created_at",
+      "@type": "xsd:dateTime"
+    },
+    "plan_status": {
+      "@id": "distribution:plan_status",
+      "@type": "xsd:string"
+    },
+    "open_change": {
+      "@id": "distribution:open_change",
+      "@type": "xsd:boolean"
+    },
+    "intent_status": {
+      "@id": "distribution:intent_status",
+      "@type": "xsd:string"
+    },
+    "stage_id": {
+      "@id": "distribution:stage_id",
+      "@type": "xsd:string"
+    },
+    "stage": {
+      "@id": "distribution:stage",
+      "@type": "xsd:string"
+    },
+    "waits_on_you": {
+      "@id": "distribution:waits_on_you",
+      "@type": "xsd:boolean"
+    },
+    "refunded_at": {
+      "@id": "distribution:refunded_at",
+      "@type": "xsd:dateTime"
+    },
+    "archived_at": {
+      "@id": "distribution:archived_at",
+      "@type": "xsd:dateTime"
+    },
+    "brand_context_version": {
+      "@id": "distribution:brand_context_version",
+      "@type": "xsd:integer"
+    },
+    "Campaigns": "distribution:Campaigns",
+    "campaigns": {
+      "@id": "distribution:campaigns",
+      "@container": "@list"
+    },
+    "CampaignStatus": "distribution:CampaignStatus",
+    "campaign": {
+      "@id": "distribution:campaign",
+      "@type": "xsd:string"
+    },
+    "plan": {
+      "@id": "distribution:plan"
+    },
+    "order": {
+      "@id": "distribution:order"
+    },
+    "creator_guidelines": {
+      "@id": "distribution:creator_guidelines"
+    },
+    "CreatorGuidelines": "distribution:CreatorGuidelines",
+    "pitch": {
+      "@id": "distribution:pitch",
+      "@type": "xsd:string"
+    },
+    "key_messages": {
+      "@id": "distribution:key_messages",
+      "@container": "@list"
+    },
+    "references": {
+      "@id": "distribution:references",
+      "@container": "@list"
+    },
+    "voice": {
+      "@id": "distribution:voice",
+      "@type": "xsd:string"
+    },
+    "dos": {
+      "@id": "distribution:dos",
+      "@container": "@list"
+    },
+    "donts": {
+      "@id": "distribution:donts",
+      "@container": "@list"
+    },
+    "CreatorGuidelinesInput": "distribution:CreatorGuidelinesInput",
+    "GuidelinesSet": "distribution:GuidelinesSet",
+    "campaign_id": {
+      "@id": "distribution:campaign_id",
+      "@type": "xsd:string"
+    },
+    "EvidenceItem": "distribution:EvidenceItem",
+    "brief_id": {
+      "@id": "distribution:brief_id",
+      "@type": "xsd:string"
+    },
+    "slot": {
+      "@id": "distribution:slot",
+      "@type": "xsd:string"
+    },
+    "status": {
+      "@id": "distribution:status",
+      "@type": "xsd:string"
+    },
+    "status_label": {
+      "@id": "distribution:status_label",
+      "@type": "xsd:string"
+    },
+    "date": {
+      "@id": "distribution:date",
+      "@type": "xsd:string"
+    },
+    "proof_url": {
+      "@id": "distribution:proof_url",
+      "@type": "xsd:string"
+    },
+    "published_at": {
+      "@id": "distribution:published_at",
+      "@type": "xsd:dateTime"
+    },
+    "disclosure": {
+      "@id": "distribution:disclosure",
+      "@type": "xsd:string"
+    },
+    "still_up": {
+      "@id": "distribution:still_up"
+    },
+    "Evidence": "distribution:Evidence",
+    "items": {
+      "@id": "distribution:items",
+      "@container": "@list"
+    },
+    "ResultItem": "distribution:ResultItem",
+    "scheduled_date": {
+      "@id": "distribution:scheduled_date",
+      "@type": "xsd:date"
+    },
+    "latest": {
+      "@id": "distribution:latest"
+    },
+    "snapshots": {
+      "@id": "distribution:snapshots",
+      "@type": "xsd:integer"
+    },
+    "previous": {
+      "@id": "distribution:previous"
+    },
+    "versus": {
+      "@id": "distribution:versus",
+      "@type": "xsd:string"
+    },
+    "schedule": {
+      "@id": "distribution:schedule",
+      "@type": "xsd:string"
+    },
+    "channel_label": {
+      "@id": "distribution:channel_label",
+      "@type": "xsd:string"
+    },
+    "spend_cents": {
+      "@id": "distribution:spend_cents",
+      "@type": "xsd:integer"
+    },
+    "currency": {
+      "@id": "distribution:currency",
+      "@type": "xsd:string"
+    },
+    "Results": "distribution:Results",
+    "Brain": "distribution:Brain",
+    "confirmed_at": {
+      "@id": "distribution:confirmed_at",
+      "@type": "xsd:dateTime"
+    },
+    "context": {
+      "@id": "distribution:context"
+    },
+    "versions": {
+      "@id": "distribution:versions",
+      "@container": "@list"
+    },
+    "BrainSection": "distribution:BrainSection",
+    "section": {
+      "@id": "distribution:section",
+      "@type": "xsd:string"
+    },
+    "value": {
+      "@id": "distribution:value",
+      "@type": "xsd:string"
+    },
+    "Offering": "distribution:Offering",
+    "unit_id": {
+      "@id": "distribution:unit_id",
+      "@type": "xsd:string"
+    },
+    "format": {
+      "@id": "distribution:format",
+      "@type": "xsd:string"
+    },
+    "deliverable": {
+      "@id": "distribution:deliverable",
+      "@type": "xsd:string"
+    },
+    "price_cents": {
+      "@id": "distribution:price_cents",
+      "@type": "xsd:integer"
+    },
+    "buyable": {
+      "@id": "distribution:buyable",
+      "@type": "xsd:boolean"
+    },
+    "price_as_of": {
+      "@id": "distribution:price_as_of",
+      "@type": "xsd:date"
+    },
+    "expected_views": {
+      "@id": "distribution:expected_views",
+      "@type": "xsd:integer"
+    },
+    "cost_per_1k_views_cents": {
+      "@id": "distribution:cost_per_1k_views_cents",
+      "@type": "xsd:integer"
+    },
+    "provenance": {
+      "@id": "distribution:provenance"
+    },
+    "calc": {
+      "@id": "distribution:calc"
+    },
+    "PastCollab": "distribution:PastCollab",
+    "project": {
+      "@id": "distribution:project",
+      "@type": "xsd:string"
+    },
+    "title": {
+      "@id": "distribution:title",
+      "@type": "xsd:string"
+    },
+    "role": {
+      "@id": "distribution:role",
+      "@type": "xsd:string"
+    },
+    "url": {
+      "@id": "distribution:url",
+      "@type": "xsd:string"
+    },
+    "brand": {
+      "@id": "distribution:brand"
+    },
+    "ListedCollab": "distribution:ListedCollab",
+    "Creator": "distribution:Creator",
+    "handle": {
+      "@id": "distribution:handle",
+      "@type": "xsd:string"
+    },
+    "name": {
+      "@id": "distribution:name",
+      "@type": "xsd:string"
+    },
+    "status_reason": {
+      "@id": "distribution:status_reason",
+      "@type": "xsd:string"
+    },
+    "in_automatic_plans": {
+      "@id": "distribution:in_automatic_plans",
+      "@type": "xsd:boolean"
+    },
+    "match_score": {
+      "@id": "distribution:match_score",
+      "@type": "xsd:integer"
+    },
+    "match_label": {
+      "@id": "distribution:match_label",
+      "@type": "xsd:string"
+    },
+    "on_sale": {
+      "@id": "distribution:on_sale",
+      "@type": "xsd:boolean"
+    },
+    "reach_band": {
+      "@id": "distribution:reach_band",
+      "@type": "xsd:string"
+    },
+    "median_views_30d": {
+      "@id": "distribution:median_views_30d",
+      "@type": "xsd:integer"
+    },
+    "median_views_30d_network": {
+      "@id": "distribution:median_views_30d_network",
+      "@type": "xsd:integer"
+    },
+    "followers": {
+      "@id": "distribution:followers",
+      "@type": "xsd:integer"
+    },
+    "verified_badge": {
+      "@id": "distribution:verified_badge",
+      "@type": "xsd:boolean"
+    },
+    "country": {
+      "@id": "distribution:country",
+      "@type": "xsd:string"
+    },
+    "language": {
+      "@id": "distribution:language",
+      "@type": "xsd:string"
+    },
+    "bio": {
+      "@id": "distribution:bio",
+      "@type": "xsd:string"
+    },
+    "positioning": {
+      "@id": "distribution:positioning",
+      "@type": "xsd:string"
+    },
+    "avatar_url": {
+      "@id": "distribution:avatar_url",
+      "@type": "xsd:string"
+    },
+    "ask_price": {
+      "@id": "distribution:ask_price",
+      "@type": "xsd:boolean"
+    },
+    "price_estimate": {
+      "@id": "distribution:price_estimate"
+    },
+    "engagement_rate_30d": {
+      "@id": "distribution:engagement_rate_30d",
+      "@type": "xsd:decimal"
+    },
+    "posts_per_week": {
+      "@id": "distribution:posts_per_week",
+      "@type": "xsd:decimal"
+    },
+    "match_reasons": {
+      "@id": "distribution:match_reasons",
+      "@container": "@list"
+    },
+    "past_collabs": {
+      "@id": "distribution:past_collabs",
+      "@container": "@list"
+    },
+    "recent_posts": {
+      "@id": "distribution:recent_posts",
+      "@container": "@list"
+    },
+    "posts_summary": {
+      "@id": "distribution:posts_summary"
+    },
+    "offerings": {
+      "@id": "distribution:offerings",
+      "@container": "@list"
+    },
+    "synced_at": {
+      "@id": "distribution:synced_at",
+      "@type": "xsd:dateTime"
+    },
+    "refresh_failed_at": {
+      "@id": "distribution:refresh_failed_at",
+      "@type": "xsd:dateTime"
+    },
+    "advice": {
+      "@id": "distribution:advice"
+    },
+    "Creators": "distribution:Creators",
+    "total": {
+      "@id": "distribution:total",
+      "@type": "xsd:integer"
+    },
+    "priced": {
+      "@id": "distribution:priced",
+      "@type": "xsd:integer"
+    },
+    "catalog": {
+      "@id": "distribution:catalog"
+    },
+    "cap": {
+      "@id": "distribution:cap",
+      "@type": "xsd:integer"
+    },
+    "limit": {
+      "@id": "distribution:limit",
+      "@type": "xsd:integer"
+    },
+    "offset": {
+      "@id": "distribution:offset",
+      "@type": "xsd:integer"
+    },
+    "creators": {
+      "@id": "distribution:creators",
+      "@container": "@list"
+    },
+    "CreatorSummary": "distribution:CreatorSummary",
+    "views_series": {
+      "@id": "distribution:views_series",
+      "@container": "@list"
+    },
+    "PaymentOption": "distribution:PaymentOption",
+    "rail": {
+      "@id": "distribution:rail",
+      "@type": "xsd:string"
+    },
+    "clears": {
+      "@id": "distribution:clears",
+      "@type": "xsd:string"
+    },
+    "Mandate": "distribution:Mandate",
+    "key_id": {
+      "@id": "distribution:key_id",
+      "@type": "xsd:string"
+    },
+    "max_plan_cents": {
+      "@id": "distribution:max_plan_cents",
+      "@type": "xsd:integer"
+    },
+    "monthly_cap_cents": {
+      "@id": "distribution:monthly_cap_cents",
+      "@type": "xsd:integer"
+    },
+    "may_approve": {
+      "@id": "distribution:may_approve",
+      "@type": "xsd:boolean"
+    },
+    "may_exceed_budget": {
+      "@id": "distribution:may_exceed_budget",
+      "@type": "xsd:boolean"
+    },
+    "expires_at": {
+      "@id": "distribution:expires_at",
+      "@type": "xsd:dateTime"
+    },
+    "updated_at": {
+      "@id": "distribution:updated_at",
+      "@type": "xsd:dateTime"
+    },
+    "spent_this_month_cents": {
+      "@id": "distribution:spent_this_month_cents",
+      "@type": "xsd:integer"
+    },
+    "terms_version": {
+      "@id": "distribution:terms_version",
+      "@type": "xsd:string"
+    },
+    "terms_accepted_at": {
+      "@id": "distribution:terms_accepted_at",
+      "@type": "xsd:dateTime"
+    },
+    "terms_accepted_email": {
+      "@id": "distribution:terms_accepted_email",
+      "@type": "xsd:string"
+    },
+    "QuoteLine": "distribution:QuoteLine",
+    "creator": {
+      "@id": "distribution:creator"
+    },
+    "creator_id": {
+      "@id": "distribution:creator_id",
+      "@type": "xsd:string"
+    },
+    "review": {
+      "@id": "distribution:review",
+      "@type": "xsd:string"
+    },
+    "vetting": {
+      "@id": "distribution:vetting",
+      "@type": "xsd:string"
+    },
+    "reason": {
+      "@id": "distribution:reason",
+      "@type": "xsd:string"
+    },
+    "expected_views_low": {
+      "@id": "distribution:expected_views_low",
+      "@type": "xsd:integer"
+    },
+    "expected_views_high": {
+      "@id": "distribution:expected_views_high",
+      "@type": "xsd:integer"
+    },
+    "Quote": "distribution:Quote",
+    "plan_id": {
+      "@id": "distribution:plan_id",
+      "@type": "xsd:string"
+    },
+    "launch_window_start": {
+      "@id": "distribution:launch_window_start",
+      "@type": "xsd:date"
+    },
+    "launch_window_end": {
+      "@id": "distribution:launch_window_end",
+      "@type": "xsd:date"
+    },
+    "terms_fingerprint": {
+      "@id": "distribution:terms_fingerprint",
+      "@type": "xsd:string"
+    },
+    "total_cents": {
+      "@id": "distribution:total_cents",
+      "@type": "xsd:integer"
+    },
+    "totals": {
+      "@id": "distribution:totals"
+    },
+    "lines": {
+      "@id": "distribution:lines",
+      "@container": "@list"
+    },
+    "payment_options": {
+      "@id": "distribution:payment_options",
+      "@container": "@list"
+    },
+    "agent_payment": {
+      "@id": "distribution:agent_payment",
+      "@type": "xsd:string"
+    },
+    "brand_terms": {
+      "@id": "distribution:brand_terms"
+    },
+    "mandate": {
+      "@id": "distribution:mandate",
+      "@type": "@id"
+    },
+    "policy": {
+      "@id": "distribution:policy"
+    },
+    "blocked_lines": {
+      "@id": "distribution:blocked_lines",
+      "@container": "@list"
+    },
+    "over_budget": {
+      "@id": "distribution:over_budget"
+    },
+    "valid_while": {
+      "@id": "distribution:valid_while"
+    },
+    "CampaignInput": "distribution:CampaignInput",
+    "goal": {
+      "@id": "distribution:goal",
+      "@type": "xsd:string"
+    },
+    "moment": {
+      "@id": "distribution:moment",
+      "@type": "xsd:string"
+    },
+    "audience": {
+      "@id": "distribution:audience",
+      "@type": "xsd:string"
+    },
+    "geography": {
+      "@id": "distribution:geography",
+      "@type": "xsd:string"
+    },
+    "window_start": {
+      "@id": "distribution:window_start",
+      "@type": "xsd:date"
+    },
+    "window_end": {
+      "@id": "distribution:window_end",
+      "@type": "xsd:date"
+    },
+    "budget_usd": {
+      "@id": "distribution:budget_usd",
+      "@type": "xsd:integer"
+    },
+    "budget_min_usd": {
+      "@id": "distribution:budget_min_usd",
+      "@type": "xsd:integer"
+    },
+    "desired_outcome": {
+      "@id": "distribution:desired_outcome",
+      "@type": "xsd:string"
+    },
+    "constraints": {
+      "@id": "distribution:constraints",
+      "@type": "xsd:string"
+    },
+    "CampaignCreated": "distribution:CampaignCreated",
+    "plan_note": {
+      "@id": "distribution:plan_note",
+      "@type": "xsd:string"
+    },
+    "defaults": {
+      "@id": "distribution:defaults",
+      "@container": "@list"
+    },
+    "budget": {
+      "@id": "distribution:budget"
+    },
+    "AskPriceInput": "distribution:AskPriceInput",
+    "PriceAsked": "distribution:PriceAsked",
+    "requested": {
+      "@id": "distribution:requested"
+    },
+    "already": {
+      "@id": "distribution:already",
+      "@type": "xsd:boolean"
+    },
+    "requested_at": {
+      "@id": "distribution:requested_at",
+      "@type": "xsd:dateTime"
+    },
+    "next": {
+      "@id": "distribution:next",
+      "@type": "xsd:string"
+    },
+    "CampaignArchived": "distribution:CampaignArchived",
+    "CampaignRenamed": "distribution:CampaignRenamed",
+    "RenameInput": "distribution:RenameInput",
+    "CampaignDeleted": "distribution:CampaignDeleted",
+    "deleted": {
+      "@id": "distribution:deleted"
+    },
+    "LineInput": "distribution:LineInput",
+    "ApproveInput": "distribution:ApproveInput",
+    "confirm_over_budget_cents": {
+      "@id": "distribution:confirm_over_budget_cents",
+      "@type": "xsd:integer"
+    },
+    "LineAdded": "distribution:LineAdded",
+    "line_id": {
+      "@id": "distribution:line_id",
+      "@type": "xsd:string"
+    },
+    "LineRemoved": "distribution:LineRemoved",
+    "removed_line_id": {
+      "@id": "distribution:removed_line_id",
+      "@type": "xsd:string"
+    },
+    "LineSwapped": "distribution:LineSwapped",
+    "MoveDatesInput": "distribution:MoveDatesInput",
+    "start": {
+      "@id": "distribution:start",
+      "@type": "xsd:date"
+    },
+    "end": {
+      "@id": "distribution:end",
+      "@type": "xsd:date"
+    },
+    "DatesMoved": "distribution:DatesMoved",
+    "lines_moved": {
+      "@id": "distribution:lines_moved",
+      "@type": "xsd:integer"
+    },
+    "Approved": "distribution:Approved",
+    "approved_at": {
+      "@id": "distribution:approved_at",
+      "@type": "xsd:dateTime"
+    },
+    "already_signed": {
+      "@id": "distribution:already_signed",
+      "@type": "xsd:boolean"
+    },
+    "payment": {
+      "@id": "distribution:payment"
+    },
+    "FeedbackContext": "distribution:FeedbackContext",
+    "tool": {
+      "@id": "distribution:tool",
+      "@type": "xsd:string"
+    },
+    "request_id": {
+      "@id": "distribution:request_id",
+      "@type": "xsd:string"
+    },
+    "error_code": {
+      "@id": "distribution:error_code",
+      "@type": "xsd:string"
+    },
+    "FeedbackInput": "distribution:FeedbackInput",
+    "kind": {
+      "@id": "distribution:kind",
+      "@type": "xsd:string"
+    },
+    "details": {
+      "@id": "distribution:details",
+      "@type": "xsd:string"
+    },
+    "FeedbackSent": "distribution:FeedbackSent",
+    "notified": {
+      "@id": "distribution:notified",
+      "@type": "xsd:string"
+    },
+    "duplicate": {
+      "@id": "distribution:duplicate",
+      "@type": "xsd:boolean"
+    },
+    "FeedbackItem": "distribution:FeedbackItem",
+    "source": {
+      "@id": "distribution:source",
+      "@type": "xsd:string"
+    },
+    "FeedbackList": "distribution:FeedbackList",
+    "feedback": {
+      "@id": "distribution:feedback",
+      "@container": "@list"
+    }
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "distribution-tech API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects distribution-tech's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-22) from openapi/distribution-tech-openapi.json.",
+  "dcterms:created": "2026-10-22",
+  "dcterms:source": [
+    "openapi/distribution-tech-openapi.json"
+  ]
+}

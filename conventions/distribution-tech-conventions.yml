@@ -1,0 +1,19 @@
+generated: '2026-10-22'
+method: searched
+generator: extract-docs-artifacts.py (local)
+source: https://distribution.tech/docs/quickstart
+sources:
+- https://distribution.tech/docs/quickstart
+- https://distribution.tech/docs
+- https://distribution.tech/docs/quickstart.md
+- https://docs.distribution.tech/how-it-works
+idempotency:
+  coverage: partial
+  header: Idempotency-Key
+  evidence: A retry with the same Idempotency-Key returns the first answer and never starts a second campaign.
+  scope:
+  - not enumerated on the pages read
+pagination: {}
+versioning: 1.29.0
+authentication: Bearer token in Authorization header
+docs: https://distribution.tech/docs/quickstart

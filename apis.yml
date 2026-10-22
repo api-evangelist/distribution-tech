@@ -1,23 +1,299 @@
 aid: distribution-tech
 name: distribution-tech
-description: 'distribution-tech is a company surfaced via the API Evangelist harvest backlog (source:
-  new-submission) and added to the network as a stub for full-pipeline profiling.'
+image: https://distribution.tech/og/home.jpg
+description: distribution-tech is a platform that connects technology companies with creator‑driven distribution channels. It offers a unified
+  workspace where brands can design, launch, and track multi‑channel campaigns, leveraging vetted creators to amplify product launches, funding
+  announcements, and feature releases. The service provides pricing transparency, real‑time analytics, and a streamlined approval workflow, aiming
+  to simplify go‑to‑market strategies for SaaS and tech startups.
 url: https://raw.githubusercontent.com/api-evangelist/distribution-tech/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:new-submission
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-10-22 (modular-v1; was harvest)
 specificationVersion: '0.20'
 created: '2026-10-22'
 modified: '2026-10-22'
 tags:
 - Company
-apis: []
+- Distribution
+- Marketing
+- SaaS
+- CreatorEconomy
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: AgenticAccess
+  url: agentic-access/distribution-tech-agentic-access.yml
+- type: Spectral
+  url: rules/distribution-tech-rules.yml
+- type: JSONLD
+  url: json-ld/distribution-tech-context.jsonld
+- type: Vocabulary
+  url: vocabulary/distribution-tech-vocabulary.yml
+- type: DataModel
+  url: data-model/distribution-tech-data-model.yml
+- type: Idempotency
+  url: conventions/distribution-tech-conventions.yml
+- type: Conventions
+  url: conventions/distribution-tech-conventions.yml
+- type: Security
+  url: security/distribution-tech-vulnerability-disclosure.yml
+- type: Authentication
+  url: authentication/distribution-tech-authentication.yml
+- type: ErrorCatalog
+  url: errors/distribution-tech-problem-types.yml
+- type: Conformance
+  url: conformance/distribution-tech-conformance.yml
+- type: LLMsTxt
+  url: llms/distribution-tech-llms.txt
+- type: SecurityTxt
+  url: well-known/distribution-tech-security.txt
+- type: SecurityTxt
+  url: well-known/distribution-tech-docs-security.txt
+- type: WellKnown
+  url: well-known/distribution-tech-well-known.yml
+- type: Hosts
+  url: hosts/distribution-tech-hosts.yml
+- type: Vendors
+  url: vendors/distribution-tech-vendors.yml
+- type: VulnerabilityDisclosure
+  url: security/distribution-tech-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/distribution-tech-domain-security.yml
 - type: Website
   url: https://distribution.tech/
+- type: DeveloperPortal
+  url: https://distribution.tech/
+- type: Documentation
+  url: https://distribution.tech/docs/
+- type: APIReference
+  url: https://distribution.tech/docs/api
+- type: GettingStarted
+  url: https://distribution.tech/how-it-works
+- type: Blog
+  url: https://distribution.tech/blog
+- type: Pricing
+  url: https://distribution.tech/pricing
+- type: TermsOfService
+  url: https://distribution.tech/terms
+- type: PrivacyPolicy
+  url: https://distribution.tech/privacy
+apis:
+- aid: distribution-tech:distribution-tech-audience-api
+  name: distribution-tech Audience API
+  description: The Audience API from distribution-tech — 1 operation(s) for audience.
+  humanURL: https://distribution.tech/docs/api
+  tags:
+  - Audience
+  properties:
+  - type: OpenAPI
+    url: openapi/distribution-tech-audience-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/distribution-tech-creator-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-status-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-quote-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-creators-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-input-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-created-schema.json
+- aid: distribution-tech:distribution-tech-brain-api
+  name: distribution-tech Brain API
+  description: The Brain API from distribution-tech — 1 operation(s) for brain.
+  humanURL: https://distribution.tech/docs/api
+  tags:
+  - Brain
+  properties:
+  - type: OpenAPI
+    url: openapi/distribution-tech-brain-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/distribution-tech-creator-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-status-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-quote-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-creators-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-input-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-created-schema.json
+- aid: distribution-tech:distribution-tech-campaigns-api
+  name: distribution-tech Campaigns API
+  description: The Campaigns API from distribution-tech — 4 operation(s) for campaigns.
+  humanURL: https://distribution.tech/docs/api
+  tags:
+  - Campaigns
+  properties:
+  - type: OpenAPI
+    url: openapi/distribution-tech-campaigns-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/distribution-tech-creator-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-status-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-quote-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-creators-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-input-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-created-schema.json
+- aid: distribution-tech:distribution-tech-creators-api
+  name: distribution-tech Creators API
+  description: The Creators API from distribution-tech — 3 operation(s) for creators.
+  humanURL: https://distribution.tech/docs/api
+  tags:
+  - Creators
+  properties:
+  - type: OpenAPI
+    url: openapi/distribution-tech-creators-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/distribution-tech-creator-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-status-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-quote-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-creators-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-input-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-created-schema.json
+- aid: distribution-tech:distribution-tech-evidence-api
+  name: distribution-tech Evidence API
+  description: The Evidence API from distribution-tech — 1 operation(s) for evidence.
+  humanURL: https://distribution.tech/docs/api
+  tags:
+  - Evidence
+  properties:
+  - type: OpenAPI
+    url: openapi/distribution-tech-evidence-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/distribution-tech-creator-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-status-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-quote-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-creators-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-input-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-created-schema.json
+- aid: distribution-tech:distribution-tech-feedback-api
+  name: distribution-tech Feedback API
+  description: The Feedback API from distribution-tech — 1 operation(s) for feedback.
+  humanURL: https://distribution.tech/docs/api
+  tags:
+  - Feedback
+  properties:
+  - type: OpenAPI
+    url: openapi/distribution-tech-feedback-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/distribution-tech-creator-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-status-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-quote-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-creators-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-input-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-created-schema.json
+- aid: distribution-tech:distribution-tech-inventory-api
+  name: distribution-tech Inventory API
+  description: The Inventory API from distribution-tech — 1 operation(s) for inventory.
+  humanURL: https://distribution.tech/docs/api
+  tags:
+  - Inventory
+  properties:
+  - type: OpenAPI
+    url: openapi/distribution-tech-inventory-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/distribution-tech-creator-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-status-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-quote-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-creators-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-input-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-created-schema.json
+- aid: distribution-tech:distribution-tech-plans-api
+  name: distribution-tech Plans API
+  description: The Plans API from distribution-tech — 6 operation(s) for plans.
+  humanURL: https://distribution.tech/docs/api
+  tags:
+  - Plans
+  properties:
+  - type: OpenAPI
+    url: openapi/distribution-tech-plans-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/distribution-tech-creator-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-status-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-quote-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-creators-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-input-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-created-schema.json
+- aid: distribution-tech:distribution-tech-results-api
+  name: distribution-tech Results API
+  description: The Results API from distribution-tech — 1 operation(s) for results.
+  humanURL: https://distribution.tech/docs/api
+  tags:
+  - Results
+  properties:
+  - type: OpenAPI
+    url: openapi/distribution-tech-results-api-openapi.yml
+  - type: JSONSchema
+    url: json-schema/distribution-tech-creator-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-status-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-quote-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-creators-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-input-schema.json
+  - type: JSONSchema
+    url: json-schema/distribution-tech-campaign-created-schema.json
+x-coverage:
+  state: gated
+  reason: partner-login
+  method: derived
+  generated: '2026-10-22'
+  generator: derive-coverage.py (pre-flight evidence)
+  detail: the company serves an API surface but requires credentials before any description of it can be read
+  evidence:
+  - url: https://distribution.tech/openapi.json
+    status: null
+  - url: https://distribution.tech/mcp
+    status: null
+  - url: https://app.distribution.tech/openapi.json
+    status: null
+  - url: https://docs.distribution.tech/openapi.json
+    status: null
+  - url: https://docs.distribution.tech/mcp
+    status: null
+  - url: https://app.distribution.tech/api/mcp
+    status: 401
+x-enrichment:
+  date: '2026-10-22'
+  status: enriched
+  artifacts_added: 29
+  pass: modular-v1
+  engine: identity=local,contract=local,surfaces=local,docs=local,regulatory=local

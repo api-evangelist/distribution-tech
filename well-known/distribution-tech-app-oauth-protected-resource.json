@@ -1,0 +1,1 @@
+{"resource":"https://app.distribution.tech/api/mcp","authorization_servers":["https://app.distribution.tech"],"scopes_supported":["inventory:read","audience:read","campaigns:read","evidence:read","results:read","brain:read","creators:read","campaigns:write","plans:approve"],"bearer_methods_supported":["header"],"resource_name":"distribution"}

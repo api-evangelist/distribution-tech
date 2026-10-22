@@ -1,0 +1,462 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/distribution-tech/main/json-schema/distribution-tech-campaign-status-schema.json",
+  "title": "CampaignStatus",
+  "x-generated": "2026-10-22",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/distribution-tech-openapi.json#/components/schemas/CampaignStatus",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "campaign": {
+      "type": "string"
+    },
+    "brand_context_version": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1,
+      "description": "The version of your brand context (GET /brain) in force when this was created. It never changes when the context is edited later; null when there was no context yet."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "refunded_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "description": "When the order was refunded; null unless it was."
+    },
+    "archived_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "description": "When the brand archived the campaign; null for a live one. An archived campaign's stage reads Archived, and renaming it or setting its creator guidelines is refused (409 conflict, reason archived)."
+    },
+    "intent_status": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "draft",
+        "ready",
+        null
+      ]
+    },
+    "plan_status": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "awaiting_approval",
+        "approved",
+        null
+      ]
+    },
+    "open_change": {
+      "type": "boolean"
+    },
+    "stage": {
+      "type": "string",
+      "enum": [
+        "Draft",
+        "Sent",
+        "Plan ready",
+        "Approved",
+        "Paid",
+        "Running",
+        "Complete",
+        "Cancelled",
+        "Archived"
+      ]
+    },
+    "stage_id": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "sent",
+        "plan_ready",
+        "approved",
+        "paid",
+        "running",
+        "complete",
+        "cancelled"
+      ],
+      "description": "draft (not sent), sent (no plan yet), plan_ready (a plan waits for approval), approved (signed, not paid), paid (the brand's payment cleared, no post started), running (a post is scheduled, live or delayed), complete (every post has its proof), cancelled (the order was cancelled or refunded)."
+    },
+    "plan": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "version": {
+              "type": "integer"
+            },
+            "status": {
+              "type": "string",
+              "enum": [
+                "awaiting_approval",
+                "approved"
+              ]
+            },
+            "launch_window_start": {
+              "type": "string",
+              "format": "date"
+            },
+            "launch_window_end": {
+              "type": "string",
+              "format": "date"
+            },
+            "currency": {
+              "type": "string"
+            },
+            "sent_at": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time"
+            },
+            "approved_at": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time"
+            },
+            "total_cents": {
+              "type": "integer"
+            },
+            "lines": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "channel": {
+                    "type": "string",
+                    "description": "Usually one of x_creators, reddit, clipping, linkedin, ugc, newsletter, podcast, other; read channel_label for display."
+                  },
+                  "channel_label": {
+                    "type": "string"
+                  },
+                  "slot": {
+                    "type": "string"
+                  },
+                  "scheduled_date": {
+                    "type": "string",
+                    "format": "date"
+                  },
+                  "price_cents": {
+                    "type": "integer"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "planned",
+                      "booked",
+                      "live",
+                      "completed",
+                      "blocked",
+                      "cancelled"
+                    ]
+                  },
+                  "stage_id": {
+                    "type": "string",
+                    "enum": [
+                      "planned",
+                      "offered",
+                      "creator_confirmed",
+                      "scheduled",
+                      "live",
+                      "proof_attached",
+                      "cancelled"
+                    ],
+                    "description": "planned (no proposal out), offered (a creator has the proposal), creator_confirmed (accepted, date not booked yet), scheduled (booked, or booked and delayed), live, proof_attached (the still-up proof is recorded), cancelled (the line, or its order, was cancelled or refunded)."
+                  },
+                  "stage": {
+                    "type": "string",
+                    "enum": [
+                      "Planned",
+                      "Offered",
+                      "Creator confirmed",
+                      "Scheduled",
+                      "Live",
+                      "Proof attached",
+                      "Cancelled"
+                    ]
+                  },
+                  "proposal": {
+                    "type": [
+                      "object",
+                      "null"
+                    ],
+                    "description": "Set once the order is paid: sending (going to the creator), sent (the creator has it, 48 hours to answer), accepted, declined or no_reply (the next match is being found), unfilled (no other approved creator fits at the paid price yet). replaced_handle names the creator this one replaced.",
+                    "properties": {
+                      "state": {
+                        "type": "string",
+                        "enum": [
+                          "sending",
+                          "sent",
+                          "accepted",
+                          "declined",
+                          "no_reply",
+                          "unfilled"
+                        ]
+                      },
+                      "creator_handle": {
+                        "type": "string"
+                      },
+                      "replaced_handle": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "updated_at": {
+                        "type": [
+                          "string",
+                          "null"
+                        ],
+                        "format": "date-time"
+                      },
+                      "brand_context_version": {
+                        "type": [
+                          "integer",
+                          "null"
+                        ],
+                        "minimum": 1,
+                        "description": "The version of your brand context (GET /brain) in force when this was created. It never changes when the context is edited later; null when there was no context yet."
+                      }
+                    },
+                    "required": [
+                      "state",
+                      "creator_handle",
+                      "replaced_handle",
+                      "updated_at",
+                      "brand_context_version"
+                    ],
+                    "additionalProperties": false
+                  }
+                },
+                "required": [
+                  "id",
+                  "channel",
+                  "channel_label",
+                  "slot",
+                  "scheduled_date",
+                  "price_cents",
+                  "status",
+                  "stage_id",
+                  "stage",
+                  "proposal"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "lines_by_status": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "integer"
+              }
+            },
+            "lines_by_stage": {
+              "type": "object",
+              "properties": {
+                "planned": {
+                  "type": "integer"
+                },
+                "offered": {
+                  "type": "integer"
+                },
+                "creator_confirmed": {
+                  "type": "integer"
+                },
+                "scheduled": {
+                  "type": "integer"
+                },
+                "live": {
+                  "type": "integer"
+                },
+                "proof_attached": {
+                  "type": "integer"
+                },
+                "cancelled": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "planned",
+                "offered",
+                "creator_confirmed",
+                "scheduled",
+                "live",
+                "proof_attached",
+                "cancelled"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "id",
+            "version",
+            "status",
+            "launch_window_start",
+            "launch_window_end",
+            "currency",
+            "sent_at",
+            "approved_at",
+            "total_cents",
+            "lines",
+            "lines_by_status",
+            "lines_by_stage"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "order": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "payment_state": {
+              "type": "string"
+            },
+            "total_cents": {
+              "type": "integer"
+            },
+            "currency": {
+              "type": "string"
+            },
+            "signed_at": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "paid_at": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time"
+            }
+          },
+          "required": [
+            "payment_state",
+            "total_cents",
+            "currency",
+            "signed_at",
+            "paid_at"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "creator_guidelines": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "$ref": "#/$defs/CreatorGuidelines"
+        }
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "campaign",
+    "brand_context_version",
+    "created_at",
+    "refunded_at",
+    "archived_at",
+    "intent_status",
+    "plan_status",
+    "open_change",
+    "stage",
+    "stage_id",
+    "plan",
+    "order",
+    "creator_guidelines"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "CreatorGuidelines": {
+      "type": "object",
+      "properties": {
+        "pitch": {
+          "type": "string",
+          "maxLength": 800,
+          "description": "What the post should get across. Empty when not set."
+        },
+        "key_messages": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 200
+          }
+        },
+        "references": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 500
+          }
+        },
+        "voice": {
+          "type": "string",
+          "maxLength": 300
+        },
+        "dos": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 200
+          }
+        },
+        "donts": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 200
+          }
+        }
+      },
+      "required": [
+        "pitch",
+        "key_messages",
+        "references",
+        "voice",
+        "dos",
+        "donts"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

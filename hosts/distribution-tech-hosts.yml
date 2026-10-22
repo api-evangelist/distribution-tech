@@ -1,0 +1,78 @@
+generated: '2026-10-22'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 4
+  own: 4
+  other_domain: 0
+  platform: 0
+  roles:
+  - api
+  - docs
+  - other
+  - website
+hosts:
+- host: api.distribution.tech
+  found_by:
+  - contract-discovery
+  types: []
+  serves: []
+  registrable_domain: distribution.tech
+  role: api
+  relation: own
+- host: app.distribution.tech
+  found_by:
+  - probed
+  - site-links
+  - spec-found
+  - contract-discovery
+  - well-known
+  types: []
+  serves:
+  - spec
+  registrable_domain: distribution.tech
+  role: other
+  relation: own
+- host: distribution.tech
+  found_by:
+  - pointer
+  - apis[]
+  - probed
+  - docs-index
+  - spec-found
+  - contract-discovery
+  - well-known
+  - vendor-detect
+  types:
+  - Website
+  - DeveloperPortal
+  - Documentation
+  - APIReference
+  - GettingStarted
+  - Blog
+  - Pricing
+  - TermsOfService
+  - PrivacyPolicy
+  serves:
+  - api
+  - docs
+  - spec
+  - hosting
+  vendor: vercel
+  registrable_domain: distribution.tech
+  role: website
+  relation: own
+- host: docs.distribution.tech
+  found_by:
+  - probed
+  - site-links
+  - docs-index
+  - contract-discovery
+  - well-known
+  types: []
+  serves:
+  - docs
+  registrable_domain: distribution.tech
+  role: docs
+  relation: own

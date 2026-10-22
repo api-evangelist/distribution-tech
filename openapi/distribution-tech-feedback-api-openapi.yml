@@ -1,0 +1,316 @@
+openapi: 3.2.0
+info:
+  title: distribution Feedback API
+  version: 1.29.0
+  description: 'Your own distribution workspace for your agents and systems. Every endpoint takes an API key you create in the workspace (Developers) as Authorization: Bearer and returns exactly what the workspace shows you. Reads are GET. The writes (start a campaign, change its creators, set what its creators read, approve for a payment link) need a key with campaigns:write or plans:approve, an Idempotency-Key header, and act only inside the mandate your brand sets on the key in Developers: its maximum plan total, monthly cap, channels, whether it may sign, its expiry and the brand terms a person accepted for it. A request outside the mandate is refused before any spend with the limit and how much over. Approved creators on sale are listed by name with their X handle and profile link, before any purchase, and every creator on a plan line is named before payment; a creator who is not approved carries no handle in lists and profiles; not-reviewed, declined and paused creators are never listed (operator decisions 2026-10-08). What bookable means (DT-021): A creator is bookable (on sale) when all of these hold: our team approved the creator after review (verified and active); our review keeps the creator among those we sell, not flagged as an inactive account and not excluded; and at least one of the creator''s formats has a fresh price: a price at most 30 days old, or a price quoted by our team. Every surface counts bookable creators with this one rule (the Creators list''s priced, Market''s Bookable now, the Overview, the chat, creators_search priced and catalog.priced, GET /api/network/facts and the guest quote), so the same filter shows the same number. An approved creator who is not bookable is still listed, with price on request. Any valid key may send feedback (POST /feedback) when something fails, is missing or could be better; it reaches the team directly. The same reads and writes are tools on the MCP server at /api/mcp. Changelog: 2026-10-21 (1.29.0): a quote line carries review, the creator''s review state (Approved, Under review), on REST and MCP; vetting stays as a deprecated alias with the same value until 2026-11-20, so read review (DT-205). 2026-10-21 (1.28.0): every approved creator is named before purchase: its X handle and profile link (handle, url) on every creator read, GET /creators rows and creators_search (CreatorSummary now lists handle and url), GET /creators/{id} and creator_get, with its post links; and a plan names its creators before payment too: plan_quote lines carry creator.handle and creator.profile_url, and campaign_status line slots carry the @handle, whatever the order''s payment state. A creator who is not approved carries no handle in lists and profiles. 2026-10-21 (1.27.0): every campaign (list and status) and every line proposal carries brand_context_version, the version of your brand context (GET /brain) in force when it was created; it is frozen there, so editing the context later never changes it, and null means there was no context yet. 2026-10-21 (1.26.3): GET /creators and GET /creators/{id} refuse a query parameter they do not take (handle, for one) with 400 bad_request, details.problems naming it and details.accepted listing what they take, instead of ignoring it. A client that sends an extra parameter now gets 400 and must drop it. Over the daily creator-view limit, an id not opened today answers 429 daily_seen before it is looked up, so an id no creator has answers 429 too, not 404: the limit never reveals which ids exist (DT-324). 2026-10-21 (1.26.2): a creator read''s 429 daily_lists (the day''s 60 list calls, each GET /creators page or creators_search) and daily_reveals carry details.limit, and daily_lists says list calls, never creator views; both are described with the creator read limits (DT-337).'
+servers:
+- url: https://app.distribution.tech/api/v1
+tags:
+- name: Feedback
+paths:
+  /feedback:
+    get:
+      summary: Your feedback
+      description: 'The feedback your brand sent, newest first, with its status (new, triaged, shipped, wont_fix); details and context only on the reports this key sent. Check it before sending so the same issue is not reported twice. limit is 1 to 50, 20 by default. Any valid key; no scope needed. MCP tool: feedback_list.'
+      security:
+      - apiKey: []
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 50
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackList'
+        '400':
+          description: 'A parameter is not valid: details.problems names each field and what it accepts.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: No API key, an unknown one, or a revoked one.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: 'Too many requests for this key in the current minute (60); Retry-After and RateLimit-Reset say when to try again. On POST /campaigns and on POST /plans/current/lines when it starts a plan: the brand''s 3 new campaigns in 24 hours are used (details.reason daily_campaign_limit); details.resets_at and Retry-After say when the limit reopens, a rolling 24 hours from the first of them, not a calendar day; archiving or deleting a campaign does not give its slot back. On GET /creators and GET /creators/{id}: a creator read limit is used (details.reason per_minute, daily_lists, daily_reveals, daily_seen or locked). daily_seen is your workspace''s one pool of 300 creator views a day (300 different creators shown or opened since midnight UTC), shared by the app and every API key of the brand: details.scope workspace and details.limit 300; a creator already seen today, in the app or through any key, still opens and costs nothing. daily_lists is the day''s list calls (each GET /creators page or creators_search is one; details.limit, 60): it is counted apart from creator views, resets at midnight UTC, and Retry-After says when. daily_reveals is the day''s creator profiles opened (details.limit, 60). The other reasons are this key''s own limit (details.scope key) or the brand''s ceiling over all its keys (details.scope api).'
+          headers:
+            Retry-After:
+              schema:
+                type: integer
+            RateLimit-Limit:
+              description: Requests one window allows for this key.
+              schema:
+                type: integer
+            RateLimit-Remaining:
+              description: Requests left in the current window.
+              schema:
+                type: integer
+            RateLimit-Reset:
+              description: Seconds until the current window closes; the next request after that opens a new one.
+              schema:
+                type: integer
+            RateLimit-Policy:
+              description: 'The limit and the window in seconds, e.g. 60;w=60. The window is fixed: it opens at the key''s first request after the last one closed (DT-271), so a burst across two windows can pass more than the limit in one rolling minute.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: 'internal: the request failed on our side. Try again.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: 'unavailable: the service or this part of it is not reachable right now. Try again shortly.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Feedback
+      operationId: getFeedback
+      x-operation-id-source: derived
+    post:
+      summary: Send feedback
+      description: 'Tell the distribution team about a problem or an idea, with any valid key, without asking the user first. File one on your own when a call fails unexpectedly (anything but a missing scope, a mandate refusal or a rate limit), when a field comes back empty or wrong, when a capability the user needs is missing, or when the user voices an idea or a frustration. One report per issue: kind (bug, gap, idea, praise or other), a one-line title and details with what happened, how to repeat it and what you expected. Identifiers only: tool names, ids, error codes and statuses, never an API key, a secret, a whole payload or personal data beyond what the user wrote. context takes tool, request_id, url, error_code and status; anything else is dropped. Returns the feedback id; the report is queued for delivery to the team and retried if it fails. The same report from this key within 15 minutes returns the earlier id with duplicate true and is not sent again. 20 a brand an hour. Any valid key; no scope needed. MCP tool: feedback_send.'
+      security:
+      - apiKey: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackInput'
+      responses:
+        '201':
+          description: Stored
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackSent'
+        '400':
+          description: 'A parameter is not valid: details.problems names each field and what it accepts.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: No API key, an unknown one, or a revoked one.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: 'unprocessable: details.problems names each field to fix, each a field and a message (details.field was removed in 1.9.0).'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Too many requests for this key this minute, or 20 feedback reports from this brand in the last hour (rate_limited, details.reason hourly_feedback_limit). Retry-After says when to try again.
+          headers:
+            Retry-After:
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: 'internal: the request failed on our side. Try again.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: 'unavailable: the service or this part of it is not reachable right now. Try again shortly.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Feedback
+      operationId: postFeedback
+      x-operation-id-source: derived
+components:
+  schemas:
+    FeedbackSent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        notified:
+          type: string
+          enum:
+          - pending
+          - duplicate
+          - slack
+          - team
+          - not_sent
+          description: 'pending: stored and queued for delivery to the team; retried if it fails. duplicate: the same report from this key in the last 15 minutes, nothing new stored or sent. slack, team: where it was delivered. not_sent: stored, delivery failed, and it is retried.'
+        duplicate:
+          type: boolean
+          description: 'true: the same kind, title and details from your brand in the last 15 minutes; id is that report, nothing new was stored or posted, and it does not count against the hourly limit.'
+      required:
+      - id
+      - notified
+      - duplicate
+      additionalProperties: false
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              enum:
+              - bad_request
+              - filter_required
+              - unauthorized
+              - forbidden
+              - not_found
+              - method_not_allowed
+              - rate_limited
+              - unavailable
+              - internal
+              - mandate_refused
+              - conflict
+              - unprocessable
+              - idempotency_conflict
+              - in_progress
+            message:
+              type: string
+            details:
+              type: object
+              description: 'Machine-readable facts. mandate_refused: reason (no_mandate, mandate_expired, channel_not_allowed, approval_not_allowed, terms_not_accepted, over_max_plan_total, over_monthly_cap, over_budget), limit_cents, requested_cents, over_by_cents, spent_cents, and escalate: true (take it to a person at the brand). conflict: reason; for over_budget on plan_add_creator or plan_swap_creator also budget_cents, remaining_cents (the room the plan had before the creator), price_cents and over_by_cents. unprocessable: problems, each a field and a message.'
+          required:
+          - code
+          - message
+          additionalProperties: false
+      required:
+      - error
+      additionalProperties: false
+    FeedbackInput:
+      type: object
+      properties:
+        kind:
+          type: string
+          enum:
+          - bug
+          - gap
+          - idea
+          - praise
+          - other
+          description: bug, gap (a missing capability or an empty or wrong field), idea, praise or other.
+        title:
+          type: string
+          minLength: 1
+          maxLength: 200
+          description: 'One line: what happened or what is missing.'
+        details:
+          type: string
+          minLength: 1
+          maxLength: 8000
+          description: 'What happened (the exact error), how to repeat it, what you expected. Identifiers only: never an API key, a secret or a payload, and never personal data beyond what the user wrote.'
+        context:
+          $ref: '#/components/schemas/FeedbackContext'
+      required:
+      - kind
+      - title
+      - details
+      additionalProperties: false
+    FeedbackList:
+      type: object
+      properties:
+        feedback:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeedbackItem'
+      required:
+      - feedback
+      additionalProperties: false
+    FeedbackContext:
+      type: object
+      description: Identifiers only. Any other key is dropped; a url keeps only its origin and path.
+      properties:
+        tool:
+          type: string
+          maxLength: 80
+        request_id:
+          type: string
+          maxLength: 120
+        url:
+          type: string
+          maxLength: 2000
+        error_code:
+          type: string
+          maxLength: 80
+        status:
+          type: integer
+          minimum: 100
+          maximum: 599
+    FeedbackItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        source:
+          type: string
+          enum:
+          - mcp
+          - rest
+          - app_agent
+          - app_ui
+        kind:
+          type: string
+          enum:
+          - bug
+          - gap
+          - idea
+          - praise
+          - other
+        title:
+          type: string
+        details:
+          type: string
+          description: Only on a report this key sent.
+        context:
+          $ref: '#/components/schemas/FeedbackContext'
+        status:
+          type: string
+          enum:
+          - new
+          - triaged
+          - shipped
+          - wont_fix
+        created_at:
+          type: string
+          format: date-time
+      required:
+      - id
+      - kind
+      - title
+      - status
+      - created_at
+      additionalProperties: false
+  securitySchemes:
+    apiKey:
+      type: http
+      scheme: bearer
+      description: 'An API key from the workspace. Scopes: inventory:read (Network coverage for your audience), audience:read (Audience fit for a campaign or a profile), campaigns:read (Campaigns and where each stands), evidence:read (Proof of each paid post), results:read (Results of each paid post), brain:read (Your company context), creators:read (Approved creators on sale, by name, with price per format), campaigns:write (Start campaigns and change the creators on a plan, within its mandate), plans:approve (Sign a plan and get its payment link, within its mandate). Rate limit: 60 requests a minute per key.'

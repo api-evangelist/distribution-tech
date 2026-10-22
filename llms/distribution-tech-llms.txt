@@ -1,0 +1,114 @@
+# distribution.tech
+
+> Tell your agent what you're shipping: it finds the X creators your buyers already follow and brings back proof. One buy, one approval, proof for every post.
+
+Live today: AI-built plans from one chat, made of reviewed X creators, each with an all-in price per post, quote or thread, that you approve and pay for online; your brand workspace with plans, approvals, proof and results; campaigns our team runs end to end, creator relationships and payouts included; an agent in your workspace, the plan chat, that drafts a priced plan, finds creators and changes the plan, acting only after you confirm each change; and agent access, where your agents read campaign status, proof and results and start and approve plans inside spending limits a person sets.
+
+Every page also serves a markdown version at its URL plus ".md" (for example https://distribution.tech/how-it-works.md).
+
+## Pages
+
+- [Home](https://distribution.tech): Creator citations, for people and for AI agents: one brief in, posts by the creators your buyers already follow out, with proof for every post.
+- [Network](https://distribution.tech/network): X creators organised by audience, among them AI builders and early adopters, plus B2B software buyers and operators, each reviewed before booking.
+- [For brands](https://distribution.tech/for-brands): Distribution for AI and SaaS teams: say what you are launching, get dated X creator posts at fixed prices, run by our team, with proof for every post.
+- [For creators](https://distribution.tech/for-creators): For X creators: paid posts for technology companies, with the brief, audience, date, format and fixed fee stated up front.
+- [How it works](https://distribution.tech/how-it-works): How a plan runs: a plan chat, an audience match, a plan of dated X posts at fixed prices, one approval, a run by our team and proof for every post.
+- [Distribution for your agents](https://distribution.tech/distribution): Run distribution on X with one chat, a fixed-price plan and proof per post. Your agents follow campaigns, and start and approve plans inside your limits.
+- [The blog: distribution notes](https://distribution.tech/blog): Notes for AI and SaaS teams on distribution through creators on X: what to ask creators for, how to buy, how to time a launch and what proof to ask for.
+- [Changelog](https://distribution.tech/changelog): What changed in distribution each week, tagged new, improved or fixed, with the build each change shipped in. Follow it by RSS or JSON feed.
+- [Changelog, page 2](https://distribution.tech/changelog/view/all/2): What changed in distribution each week, tagged new, improved or fixed, with the build each change shipped in. Follow it by RSS or JSON feed.
+- [Changelog, page 3](https://distribution.tech/changelog/view/all/3): What changed in distribution each week, tagged new, improved or fixed, with the build each change shipped in. Follow it by RSS or JSON feed.
+- [Changelog, page 4](https://distribution.tech/changelog/view/all/4): What changed in distribution each week, tagged new, improved or fixed, with the build each change shipped in. Follow it by RSS or JSON feed.
+- [Changelog: Fixed](https://distribution.tech/changelog/view/fixed/1): What changed in distribution each week, tagged new, improved or fixed, with the build each change shipped in. Follow it by RSS or JSON feed.
+- [Changelog: Improved](https://distribution.tech/changelog/view/improved/1): What changed in distribution each week, tagged new, improved or fixed, with the build each change shipped in. Follow it by RSS or JSON feed.
+- [Changelog: Improved, page 2](https://distribution.tech/changelog/view/improved/2): What changed in distribution each week, tagged new, improved or fixed, with the build each change shipped in. Follow it by RSS or JSON feed.
+- [Changelog: Improved, page 3](https://distribution.tech/changelog/view/improved/3): What changed in distribution each week, tagged new, improved or fixed, with the build each change shipped in. Follow it by RSS or JSON feed.
+- [Changelog: New](https://distribution.tech/changelog/view/new/1): What changed in distribution each week, tagged new, improved or fixed, with the build each change shipped in. Follow it by RSS or JSON feed.
+- [AI answers already cite creators.](https://distribution.tech/creator-citations): Creator citations, for people and for AI agents: one brief in, posts by the creators your buyers follow out, priced per post and proven one by one.
+- [Customers](https://distribution.tech/customers): Customers of distribution: ClickUp, Gushwork and Tab ran creator waves on X around their launches, planned, briefed, paid and proven by our team.
+- [Docs](https://distribution.tech/docs): Docs for the distribution API and MCP server: one page per endpoint and per tool, each with its parameters, the response it returns and a curl call.
+- [Run a campaign with your agent](https://distribution.tech/docs/agents): How an agent runs a distribution campaign with an API key: the eight-step flow, the limits, the spending mandate, every error code and feedback.
+- [API reference](https://distribution.tech/docs/api): The distribution REST API: the base URL, authentication, scopes, errors, and one page per endpoint built from the API's own contract.
+- [Authentication](https://distribution.tech/docs/api/authentication): Every API and MCP call sends an API key from Developers as a Bearer token. How keys, scopes, mandates and idempotency keys work.
+- [DELETE /campaigns/{id}: Delete a draft campaign](https://distribution.tech/docs/api/delete-campaigns-id): Delete a draft campaign that was never sent, the same as Delete in the workspace.
+- [DELETE /plans/{id}/lines/{line_id}: Remove a creator](https://distribution.tech/docs/api/delete-plans-id-lines-line-id): Drop one line from a plan awaiting approval.
+- [Errors](https://distribution.tech/docs/api/errors): Every error code the distribution API and MCP server return, its HTTP status, the body it returns, and what to do next.
+- [GET /audience: Audience fit for one of your campaigns, or for a profile](https://distribution.tech/docs/api/get-audience): Scope: audience:read.
+- [GET /brain: Your company context and its version](https://distribution.tech/docs/api/get-brain): Scope: brain:read.
+- [GET /campaigns: Your campaigns and where each stands](https://distribution.tech/docs/api/get-campaigns): Scope: campaigns:read.
+- [GET /campaigns/{id}: Where one campaign stands](https://distribution.tech/docs/api/get-campaigns-id): Scope: campaigns:read.
+- [GET /creators: Approved creators on sale now, by name, with price per format and format advice](https://distribution.tech/docs/api/get-creators): Scope: creators:read.
+- [GET /creators/{id}: One creator's full profile](https://distribution.tech/docs/api/get-creators-id): Scope: creators:read.
+- [GET /evidence: Proof of each post a paid campaign put live](https://distribution.tech/docs/api/get-evidence): Scope: evidence:read.
+- [GET /feedback: Your feedback](https://distribution.tech/docs/api/get-feedback): The feedback your brand sent, newest first, with its status (new, triaged, shipped, wont_fix); details and context only on the reports this key sent.
+- [GET /inventory: Network coverage for your audience](https://distribution.tech/docs/api/get-inventory): Scope: inventory:read.
+- [GET /plans/{id}/quote: A plan as you sign it](https://distribution.tech/docs/api/get-plans-id-quote): Scope: campaigns:read.
+- [GET /results: Results of each post a paid campaign put live](https://distribution.tech/docs/api/get-results): Scope: results:read.
+- [PATCH /campaigns/{id}: Rename a campaign](https://distribution.tech/docs/api/patch-campaigns-id): Give one campaign a new name, the same as Rename in the workspace.
+- [POST /campaigns: Start a campaign](https://distribution.tech/docs/api/post-campaigns): From a goal to a priced plan in one call: goal (launch, funding, feature or program), product, moment (what goes live and when), window_start, window_end.
+- [POST /campaigns/{id}/archive: Archive a campaign](https://distribution.tech/docs/api/post-campaigns-id-archive): Take one campaign out of the list, the same as Archive in the workspace.
+- [POST /campaigns/{id}/creator-guidelines: Set the creator guidelines](https://distribution.tech/docs/api/post-campaigns-id-creator-guidelines): Set what every booked creator of one campaign reads: pitch (what the post should get across, up to 800 characters), key_messages, references (https links).
+- [POST /creators/{id}/price-request: Ask for a price](https://distribution.tech/docs/api/post-creators-id-price-request): Ask our team for the price of an approved creator with nothing on sale (ask_price true and price_estimate on its row; the estimate is never a price).
+- [POST /feedback: Send feedback](https://distribution.tech/docs/api/post-feedback): Tell the distribution team about a problem or an idea, with any valid key, without asking the user first.
+- [POST /plans/{id}/approve: Approve and get the pay link](https://distribution.tech/docs/api/post-plans-id-approve): Sign a plan at the terms_fingerprint from plan_quote, under the brand terms a person at the brand accepted for this key, and get the Stripe Checkout link.
+- [POST /plans/{id}/dates: Move a plan's dates](https://distribution.tech/docs/api/post-plans-id-dates): Move a plan awaiting approval to new dates in one step: start and end (YYYY-MM-DD) become the plan's launch window and the campaign's dates, and every.
+- [POST /plans/{id}/lines: Add a creator](https://distribution.tech/docs/api/post-plans-id-lines): Add a creator to a plan awaiting approval by its unit_id (a format's unit_id from creators_search or creator_get), at that format's current all-in price.
+- [POST /plans/{id}/lines/{line_id}/swap: Swap a creator](https://distribution.tech/docs/api/post-plans-id-lines-line-id-swap): Replace one line of a plan awaiting approval (line_id from plan_quote) with another creator's format (unit_id from creators_search or creator_get) at its.
+- [Scopes](https://distribution.tech/docs/api/scopes): The nine API key scopes, what each one lets a key read or change, and which two need a spending mandate.
+- [Changelog](https://distribution.tech/docs/changelog): What changed in distribution, in three places: API releases, the brand terms, and the weekly product changelog.
+- [API release notes](https://distribution.tech/docs/changelog/api): Every release of the distribution REST API and MCP server, newest first: what changed, which fields and errors moved, and the date it shipped.
+- [Brand terms changes](https://distribution.tech/docs/changelog/terms): Every version of the distribution brand terms, the date it took effect, what changed, and how a workspace accepts a new version.
+- [Invite a creator to a campaign](https://distribution.tech/docs/help/invite-creators): Bring a creator you already know into a campaign: invite them by X handle or share a link, follow each invite's state, and withdraw one.
+- [Pay for a plan](https://distribution.tech/docs/help/pay): How payment works once you approve a plan: card or US bank account, when creators are booked, how long placements are held, and the 48-hour swap window.
+- [Plan a campaign](https://distribution.tech/docs/help/plan-a-campaign): How a campaign becomes a priced plan of creator posts in your workspace, what you can change before you approve it, and what approving records.
+- [Proof of every post](https://distribution.tech/docs/help/proof): What we record for each placement once it runs, where you see it, and what counts as delivered.
+- [MCP server](https://distribution.tech/docs/mcp): The distribution MCP server: the address, how to connect with or without a key, and one page per tool built from the server's own tool list.
+- [MCP tool: Approve and get the pay link](https://distribution.tech/docs/mcp/tools/approve-plan): Sign a plan at the terms_fingerprint from plan_quote, under the brand terms a person at the brand accepted for this key, and get the Stripe Checkout link.
+- [MCP tool: Archive a campaign](https://distribution.tech/docs/mcp/tools/archive-campaign): Take one campaign out of the list, the same as Archive in the workspace.
+- [MCP tool: Company context](https://distribution.tech/docs/mcp/tools/brain-get): Your company context as confirmed in the workspace (name, summary, audience), its version and the version history.
+- [MCP tool: Campaign status](https://distribution.tech/docs/mcp/tools/campaign-status): With campaign_id: where that campaign stands (its stage, as stage_id draft, sent, plan_ready, approved, paid, running, complete or cancelled, the current.
+- [MCP tool: Start a campaign](https://distribution.tech/docs/mcp/tools/create-campaign): From a goal to a priced plan in one call: goal (launch, funding, feature or program), product, moment (what goes live and when), window_start, window_end.
+- [MCP tool: Ask for a price](https://distribution.tech/docs/mcp/tools/creator-ask-price): Ask our team for the price of an approved creator with nothing on sale (ask_price true and price_estimate on its row; the estimate is never a price).
+- [MCP tool: One creator](https://distribution.tech/docs/mcp/tools/creator-get): One creator's full profile by id: bio, followers, the X blue check, country and language when known, measured engagement, posting rate, the last 30 days of.
+- [MCP tool: Find creators](https://distribution.tech/docs/mcp/tools/creators-search): Approved X creators that reach your audience: the list is the segments you pass in match, else your brand's own audience; a segment you name without match.
+- [MCP tool: Delete a draft campaign](https://distribution.tech/docs/mcp/tools/delete-campaign): Delete a draft campaign that was never sent, the same as Delete in the workspace.
+- [MCP tool: Proof of delivery](https://distribution.tech/docs/mcp/tools/evidence): For each post a paid campaign put live: the post link, when it went out and the disclosure it carries.
+- [MCP tool: Your feedback](https://distribution.tech/docs/mcp/tools/feedback-list): The feedback your brand sent, newest first, with its status (new, triaged, shipped, wont_fix); details and context only on the reports this key sent.
+- [MCP tool: Send feedback](https://distribution.tech/docs/mcp/tools/feedback-send): Tell the distribution team about a problem or an idea, with any valid key, without asking the user first.
+- [MCP tool: Network coverage](https://distribution.tech/docs/mcp/tools/inventory): How well the network reaches your own audience today, per channel: approved creators and posts on sale at a current price, and whether coverage is strong or.
+- [MCP tool: Add a creator](https://distribution.tech/docs/mcp/tools/plan-add-creator): Add a creator to a plan awaiting approval by its unit_id (a format's unit_id from creators_search or creator_get), at that format's current all-in price.
+- [MCP tool: Move a plan's dates](https://distribution.tech/docs/mcp/tools/plan-move-dates): Move a plan awaiting approval to new dates in one step: start and end (YYYY-MM-DD) become the plan's launch window and the campaign's dates, and every.
+- [MCP tool: Quote a plan](https://distribution.tech/docs/mcp/tools/plan-quote): One plan of yours as the person sees it and as you sign it: each line with the creator's name, X handle and profile link (before payment too), format, date.
+- [MCP tool: Remove a creator](https://distribution.tech/docs/mcp/tools/plan-remove-creator): Drop one line from a plan awaiting approval.
+- [MCP tool: Swap a creator](https://distribution.tech/docs/mcp/tools/plan-swap-creator): Replace one line of a plan awaiting approval (line_id from plan_quote) with another creator's format (unit_id from creators_search or creator_get) at its.
+- [MCP tool: Rename a campaign](https://distribution.tech/docs/mcp/tools/rename-campaign): Give one campaign a new name, the same as Rename in the workspace.
+- [MCP tool: Resolve an audience](https://distribution.tech/docs/mcp/tools/resolve-audience): The audience fit for one of your campaigns (intent_id) or for a profile you describe (product, audience, geography): the audience segments it matches and.
+- [MCP tool: Results](https://distribution.tech/docs/mcp/tools/results): For each post a paid campaign put live: the latest observed numbers with their source and date, and, once complete, the outcome against what the plan.
+- [MCP tool: Set the creator guidelines](https://distribution.tech/docs/mcp/tools/set-creator-guidelines): Set what every booked creator of one campaign reads: pitch (what the post should get across, up to 800 characters), key_messages, references (https links).
+- [Quickstart: your first API call](https://distribution.tech/docs/quickstart): Create an API key, read how well the network reaches your audience with one curl call, then start a campaign and quote its plan.
+- [Official facts](https://distribution.tech/facts): Official facts about distribution: how plans are priced, published X creator rates, who you can book, the booking steps and where agents connect.
+- [The X launch playbook](https://distribution.tech/playbook): The X launch playbook: time a creator wave around launch day, choose creators by audience, write a brief they can act on, and prove every post.
+- [Pricing](https://distribution.tech/pricing): How we price distribution: tell us the objective and budget, get every placement priced and one total in minutes, and pay only for the plan you sign.
+- [Privacy](https://distribution.tech/privacy): What we collect on this site and in our app, including analytics and error reports, why, how long we keep it, and how to see, correct or delete it.
+- [X creator rates](https://distribution.tech/rates/x-creators): How X creator pricing works: what sets the base price of a sponsored post, what moves it, and how a plan fixes one price per post.
+- [Feature release](https://distribution.tech/solutions/feature-release): Plan a feature release on X: creators your users follow explain what changed, at dated slots and fixed prices you approve, with proof per post.
+- [Funding announcement](https://distribution.tech/solutions/funding-announcement): Plan a funding announcement on X: carry the raise to your buyers through creators at dated slots and fixed prices, with proof for every post.
+- [Product launch](https://distribution.tech/solutions/product-launch): Plan a product launch on X: creators who reach your buyers post in the first hours, at dated slots and fixed prices, with proof for every post.
+- [Terms](https://distribution.tech/terms): Terms for brands and creators who work with us: the service, each side's duties, payments, content, liability and ending the work.
+
+## Blog
+
+- [LinkedIn Opened a Creator Marketplace to B2B. Here Is Where a Launch Should Spend](https://distribution.tech/blog/linkedin-creator-marketplace-b2b-pre-roll): LinkedIn put searchable creator discovery and pre-roll video in its ad desk. What that changes about where a SaaS launch spends, and the brief it needs.
+- [When AI Can Clone Your Product in a Weekend, Distribution Is What Lasts](https://distribution.tech/blog/ai-clone-wave-distribution): Agents can now rebuild a product's features in a weekend. What that does to a tech company's edge, and why reach to the buyer is now the part worth owning.
+- [How SaaS teams buy influencer marketing: direct, platform, or managed campaign](https://distribution.tech/blog/saas-influencer-marketing-buying-options): A SaaS team can hire creators directly, buy through a platform, or run a managed campaign. This guide compares the three routes on control, effort and proof.
+- [Why B2B influencer marketing underdelivers for SaaS launches, and how to brief creators](https://distribution.tech/blog/b2b-influencer-marketing-saas-launch-creator-brief): Most B2B influencer marketing for SaaS launches fails at the brief, not the creator. Here is what a launch brief must specify to get reach you can prove.
+
+## For agents
+
+A brand's own agents use its workspace with an API key the brand creates at https://app.distribution.tech/workspace/developers (sent as Authorization: Bearer <key>). Read scopes cover network coverage, approved creators on sale, audience fit, campaigns, plan quotes, proof and results of paid posts, and company context. The write scopes campaigns:write and plans:approve let an agent start a campaign from a goal, add or remove creators on its plan, replace the guidelines every booked creator reads, and approve a plan for a payment link. Anything that spends runs only inside a spending mandate a person sets on the key in the workspace: the most per plan, the most per month, the channels, whether the key may approve, an expiry, and brand terms a person accepted. Approving needs the mandate to allow it, a request over the per-plan or monthly cap is refused before anything is spent, and every write that changes a campaign or plan needs an Idempotency-Key, so a retry never runs twice. Any valid key can also report a bug, gap or idea with feedback_send (POST /feedback) and list the brand's reports with feedback_list (GET /feedback: full detail for this key's reports, a summary for other keys'); these need no scope and no Idempotency-Key, and the same report from the same key within 15 minutes is kept once.
+
+- [REST API OpenAPI document](https://distribution.tech/openapi.json): every read (GET) and write (POST, DELETE, PATCH) under https://app.distribution.tech/api/v1, with its scope.
+- [API catalog](https://distribution.tech/.well-known/api-catalog): RFC 9727 linkset of the API above.
+- [Agent skill](https://distribution.tech/.well-known/agent-skills/read-workspace/SKILL.md), listed in the [skills index](https://distribution.tech/.well-known/agent-skills/index.json): how an agent reads the workspace and acts inside its mandate.
+
+Full reference: https://distribution.tech/llms-full.txt

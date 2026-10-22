@@ -1,0 +1,46 @@
+{
+  "linkset": [
+    {
+      "anchor": "https://distribution.tech/.well-known/api-catalog",
+      "item": [
+        {
+          "href": "https://app.distribution.tech/api/v1"
+        }
+      ]
+    },
+    {
+      "anchor": "https://app.distribution.tech/api/v1",
+      "service-desc": [
+        {
+          "href": "https://distribution.tech/openapi.json",
+          "type": "application/vnd.oai.openapi+json",
+          "title": "OpenAPI 3.1 document"
+        }
+      ],
+      "service-doc": [
+        {
+          "href": "https://distribution.tech/docs/agents",
+          "type": "text/html",
+          "title": "Run a campaign with your agent"
+        },
+        {
+          "href": "https://distribution.tech/.well-known/agent-skills/read-workspace/SKILL.md",
+          "type": "text/markdown",
+          "title": "How an agent uses the workspace"
+        }
+      ],
+      "terms-of-service": [
+        {
+          "href": "https://distribution.tech/terms",
+          "type": "text/html"
+        }
+      ],
+      "privacy-policy": [
+        {
+          "href": "https://distribution.tech/privacy",
+          "type": "text/html"
+        }
+      ]
+    }
+  ]
+}

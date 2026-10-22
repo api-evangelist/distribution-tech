@@ -1,0 +1,85 @@
+generated: '2026-10-22'
+method: derived
+generator: derive-problem-types.py
+source:
+- openapi/distribution-tech-openapi.json
+format: custom
+envelope:
+  media_type: application/json
+  schema: Error
+coverage:
+  operations: 23
+  statuses_declared: 10
+problems:
+- status: 400
+  title: Bad Request
+  description: 'A parameter is not valid: details.problems names each field and what it accepts.'
+  operations: 23
+  media_types:
+  - application/json
+  schema: Error
+- status: 401
+  title: Unauthorized
+  description: No API key, an unknown one, or a revoked one.
+  operations: 23
+  media_types:
+  - application/json
+  schema: Error
+- status: 403
+  title: Forbidden
+  description: The key does not have this endpoint's scope.
+  operations: 21
+  media_types:
+  - application/json
+  schema: Error
+- status: 404
+  title: Not Found
+  description: No plan, line or creator of yours has that id.
+  operations: 15
+  media_types:
+  - application/json
+  schema: Error
+- status: 409
+  title: Conflict
+  description: conflict (with a reason), idempotency_conflict, or in_progress (Retry-After).
+  operations: 11
+  media_types:
+  - application/json
+  schema: Error
+- status: 422
+  title: Unprocessable Content
+  description: 'unprocessable: the body is readable but a value cannot be used (a blank or too long name, a campaign
+    that cannot be planned yet); details.pr'
+  operations: 12
+  media_types:
+  - application/json
+  schema: Error
+- status: 429
+  title: Too Many Requests
+  description: 'Too many requests for this key in the current minute (60); Retry-After and RateLimit-Reset say when
+    to try again. On POST /campaigns and on '
+  operations: 23
+  media_types:
+  - application/json
+  schema: Error
+- status: 500
+  title: Internal Server Error
+  description: 'internal: the request failed on our side. Try again.'
+  operations: 23
+  media_types:
+  - application/json
+  schema: Error
+- status: 502
+  title: Bad Gateway
+  description: 'unavailable: the ask did not reach our team, so it was not kept. Try again in a minute.'
+  operations: 1
+  media_types:
+  - application/json
+  schema: Error
+- status: 503
+  title: Service Unavailable
+  description: 'unavailable: the service or this part of it is not reachable right now. Try again shortly.'
+  operations: 23
+  media_types:
+  - application/json
+  schema: Error

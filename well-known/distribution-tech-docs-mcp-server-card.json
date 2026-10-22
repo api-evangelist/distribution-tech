@@ -1,0 +1,30 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/v1/server-card.schema.json",
+  "name": "tech.distribution/workspace",
+  "title": "distribution",
+  "description": "Your distribution workspace: read campaigns, proof, results; start and approve plans in a mandate.",
+  "version": "1.0.0",
+  "websiteUrl": "https://distribution.tech/docs/agents",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://app.distribution.tech/api/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "An API key the brand creates in its workspace at https://app.distribution.tech/workspace/developers. Its scopes set what it reads; writes act only inside the mandate a person sets on it. 60 requests a minute per key.",
+          "isRequired": true,
+          "isSecret": true,
+          "value": "Bearer {api_key}",
+          "variables": {
+            "api_key": {
+              "description": "The workspace API key.",
+              "isRequired": true,
+              "isSecret": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

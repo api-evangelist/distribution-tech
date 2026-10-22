@@ -1,0 +1,268 @@
+generated: '2026-10-22'
+method: derived
+generator: derive-vocabulary.py
+source: openapi/distribution-tech-openapi.json
+vocabulary:
+  name: distribution-tech Domain Vocabulary
+  description: 'Terms declared by distribution-tech''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-22'
+  terms:
+  - term: Error
+    definition: 'Object declared by the contract with fields: error.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/Error
+  - term: ChannelFit
+    definition: 'Object declared by the contract with fields: channel, label, sale, level, verified_nodes, bookable_nodes, priced_units, note.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/ChannelFit
+  - term: Segment
+    definition: 'Object declared by the contract with fields: id, label.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/Segment
+  - term: Inventory
+    definition: 'Object declared by the contract with fields: segments, unresolved, coverage_as_of, channels.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/Inventory
+  - term: AudienceFit
+    definition: 'Object declared by the contract with fields: version, computed_at, coverage_as_of, segments, regions, unresolved, channels, thin,
+      summary.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/AudienceFit
+  - term: CampaignSummary
+    definition: 'Object declared by the contract with fields: id, display_name, company, product, objective, created_at, plan_status, open_change,
+      intent_status, stage_id, stage, waits_on_you. (3 more)'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/CampaignSummary
+  - term: Campaigns
+    definition: 'Object declared by the contract with fields: campaigns.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/Campaigns
+  - term: CampaignStatus
+    definition: 'Object declared by the contract with fields: id, campaign, brand_context_version, created_at, refunded_at, archived_at, intent_status,
+      plan_status, open_change, stage, stage_id, plan. (2 more)'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/CampaignStatus
+  - term: CreatorGuidelines
+    definition: 'Object declared by the contract with fields: pitch, key_messages, references, voice, dos, donts.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/CreatorGuidelines
+  - term: CreatorGuidelinesInput
+    definition: Every field is optional; a field left out is cleared. Creators read pitch, dos and donts with their proposal and everything once
+      they accept.
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/CreatorGuidelinesInput
+  - term: GuidelinesSet
+    definition: 'Object declared by the contract with fields: campaign_id, creator_guidelines.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/GuidelinesSet
+  - term: EvidenceItem
+    definition: 'Object declared by the contract with fields: id, campaign_id, brief_id, campaign, slot, status, status_label, date, proof_url,
+      published_at, disclosure, still_up.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/EvidenceItem
+  - term: Evidence
+    definition: 'Object declared by the contract with fields: items.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/Evidence
+  - term: ResultItem
+    definition: 'Object declared by the contract with fields: id, campaign_id, brief_id, campaign, slot, scheduled_date, date, status, status_label,
+      proof_url, published_at, disclosure. (9 more)'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/ResultItem
+  - term: Results
+    definition: 'Object declared by the contract with fields: items.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/Results
+  - term: Brain
+    definition: 'Object declared by the contract with fields: version, confirmed_at, context, versions.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/Brain
+  - term: BrainSection
+    definition: 'Object declared by the contract with fields: version, confirmed_at, section, value.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/BrainSection
+  - term: Offering
+    definition: 'Object declared by the contract with fields: unit_id, format, label, deliverable, price_cents, buyable, price_as_of, expected_views,
+      cost_per_1k_views_cents, provenance, calc.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/Offering
+  - term: PastCollab
+    definition: 'Object declared by the contract with fields: project, title, date, role, url, brand.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/PastCollab
+  - term: ListedCollab
+    definition: 'A collaboration in a list row: PastCollab without url (the creator''s own post names them; DT-127).'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/ListedCollab
+  - term: Creator
+    definition: 'Object declared by the contract with fields: provenance, id, handle, name, url, status, status_label, status_reason, in_automatic_plans,
+      match_score, match_label, on_sale. (23 more)'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/Creator
+  - term: Creators
+    definition: 'Object declared by the contract with fields: total, priced, catalog, cap, limit, offset, creators.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/Creators
+  - term: CreatorSummary
+    definition: 'A creator in a list: the Creator fields without recent_posts and posts_summary (handle and url as on Creator: set for an approved
+      creator, null otherwise), and collaborations without their link (DT-127).'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/CreatorSummary
+  - term: Money
+    definition: US cents.
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/Money
+  - term: PaymentOption
+    definition: 'Object declared by the contract with fields: rail, label, clears.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/PaymentOption
+  - term: Mandate
+    definition: 'Object declared by the contract with fields: key_id, version, max_plan_cents, monthly_cap_cents, channels, may_approve, may_exceed_budget,
+      expires_at, updated_at, spent_this_month_cents, terms_version, terms_accepted_at. (1 more)'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/Mandate
+  - term: QuoteLine
+    definition: 'Object declared by the contract with fields: id, creator, creator_id, unit_id, stage_id, stage, channel, channel_label, format,
+      deliverable, scheduled_date, price_cents. (6 more)'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/QuoteLine
+  - term: Quote
+    definition: A plan as the person sees it and as an agent signs it (v1-product-spec 8.5 Quote).
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/Quote
+  - term: CampaignInput
+    definition: Left out, audience and company come from your company context (the audience your website read found; with no website read yet,
+      send audience), geography is worldwide and desired_outcome is the goal's usual outcome; the answer's defaults names each field filled. A
+      422 names every required field that is missing, each in details.problems.
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/CampaignInput
+  - term: CampaignCreated
+    definition: 'Object declared by the contract with fields: campaign_id, status, plan, plan_note, defaults, budget.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/CampaignCreated
+  - term: AskPriceInput
+    definition: Optional. Send {} or no body to ask from no campaign.
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/AskPriceInput
+  - term: PriceAsked
+    definition: 'Object declared by the contract with fields: creator_id, requested, already, status, requested_at, next.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/PriceAsked
+  - term: CampaignArchived
+    definition: 'Object declared by the contract with fields: campaign_id, archived_at.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/CampaignArchived
+  - term: CampaignRenamed
+    definition: 'Object declared by the contract with fields: campaign_id, name.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/CampaignRenamed
+  - term: RenameInput
+    definition: 'Object declared by the contract with fields: name.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/RenameInput
+  - term: CampaignDeleted
+    definition: 'Object declared by the contract with fields: campaign_id, deleted.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/CampaignDeleted
+  - term: LineInput
+    definition: 'Object declared by the contract with fields: unit_id.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/LineInput
+  - term: ApproveInput
+    definition: 'Object declared by the contract with fields: terms_fingerprint, confirm_over_budget_cents.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/ApproveInput
+  - term: LineAdded
+    definition: 'Object declared by the contract with fields: line_id, plan.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/LineAdded
+  - term: LineRemoved
+    definition: 'Object declared by the contract with fields: removed_line_id, plan.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/LineRemoved
+  - term: LineSwapped
+    definition: 'Object declared by the contract with fields: line_id, removed_line_id, plan.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/LineSwapped
+  - term: MoveDatesInput
+    definition: 'Object declared by the contract with fields: start, end.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/MoveDatesInput
+  - term: DatesMoved
+    definition: 'Object declared by the contract with fields: lines_moved, plan.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/DatesMoved
+  - term: Approved
+    definition: 'Object declared by the contract with fields: plan_id, status, approved_at, already_signed, order, payment.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/Approved
+  - term: FeedbackContext
+    definition: Identifiers only. Any other key is dropped; a url keeps only its origin and path.
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/FeedbackContext
+  - term: FeedbackInput
+    definition: 'Object declared by the contract with fields: kind, title, details, context.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/FeedbackInput
+  - term: FeedbackSent
+    definition: 'Object declared by the contract with fields: id, notified, duplicate.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/FeedbackSent
+  - term: FeedbackItem
+    definition: 'Object declared by the contract with fields: id, source, kind, title, details, context, status, created_at.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/FeedbackItem
+  - term: FeedbackList
+    definition: 'Object declared by the contract with fields: feedback.'
+    tags:
+    - Object
+    source: openapi/distribution-tech-openapi.json#/components/schemas/FeedbackList

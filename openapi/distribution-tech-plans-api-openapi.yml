@@ -1,0 +1,1250 @@
+openapi: 3.2.0
+info:
+  title: distribution Plans API
+  version: 1.29.0
+  description: 'Your own distribution workspace for your agents and systems. Every endpoint takes an API key you create in the workspace (Developers) as Authorization: Bearer and returns exactly what the workspace shows you. Reads are GET. The writes (start a campaign, change its creators, set what its creators read, approve for a payment link) need a key with campaigns:write or plans:approve, an Idempotency-Key header, and act only inside the mandate your brand sets on the key in Developers: its maximum plan total, monthly cap, channels, whether it may sign, its expiry and the brand terms a person accepted for it. A request outside the mandate is refused before any spend with the limit and how much over. Approved creators on sale are listed by name with their X handle and profile link, before any purchase, and every creator on a plan line is named before payment; a creator who is not approved carries no handle in lists and profiles; not-reviewed, declined and paused creators are never listed (operator decisions 2026-10-08). What bookable means (DT-021): A creator is bookable (on sale) when all of these hold: our team approved the creator after review (verified and active); our review keeps the creator among those we sell, not flagged as an inactive account and not excluded; and at least one of the creator''s formats has a fresh price: a price at most 30 days old, or a price quoted by our team. Every surface counts bookable creators with this one rule (the Creators list''s priced, Market''s Bookable now, the Overview, the chat, creators_search priced and catalog.priced, GET /api/network/facts and the guest quote), so the same filter shows the same number. An approved creator who is not bookable is still listed, with price on request. Any valid key may send feedback (POST /feedback) when something fails, is missing or could be better; it reaches the team directly. The same reads and writes are tools on the MCP server at /api/mcp. Changelog: 2026-10-21 (1.29.0): a quote line carries review, the creator''s review state (Approved, Under review), on REST and MCP; vetting stays as a deprecated alias with the same value until 2026-11-20, so read review (DT-205). 2026-10-21 (1.28.0): every approved creator is named before purchase: its X handle and profile link (handle, url) on every creator read, GET /creators rows and creators_search (CreatorSummary now lists handle and url), GET /creators/{id} and creator_get, with its post links; and a plan names its creators before payment too: plan_quote lines carry creator.handle and creator.profile_url, and campaign_status line slots carry the @handle, whatever the order''s payment state. A creator who is not approved carries no handle in lists and profiles. 2026-10-21 (1.27.0): every campaign (list and status) and every line proposal carries brand_context_version, the version of your brand context (GET /brain) in force when it was created; it is frozen there, so editing the context later never changes it, and null means there was no context yet. 2026-10-21 (1.26.3): GET /creators and GET /creators/{id} refuse a query parameter they do not take (handle, for one) with 400 bad_request, details.problems naming it and details.accepted listing what they take, instead of ignoring it. A client that sends an extra parameter now gets 400 and must drop it. Over the daily creator-view limit, an id not opened today answers 429 daily_seen before it is looked up, so an id no creator has answers 429 too, not 404: the limit never reveals which ids exist (DT-324). 2026-10-21 (1.26.2): a creator read''s 429 daily_lists (the day''s 60 list calls, each GET /creators page or creators_search) and daily_reveals carry details.limit, and daily_lists says list calls, never creator views; both are described with the creator read limits (DT-337).'
+servers:
+- url: https://app.distribution.tech/api/v1
+tags:
+- name: Plans
+paths:
+  /plans/{id}/quote:
+    get:
+      summary: 'A plan as you sign it: named creators, all-in prices, totals, payment options…'
+      description: 'Scope: campaigns:read.'
+      security:
+      - apiKey:
+        - campaigns:read
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          headers:
+            RateLimit-Limit:
+              description: Requests one window allows for this key.
+              schema:
+                type: integer
+            RateLimit-Remaining:
+              description: Requests left in the current window.
+              schema:
+                type: integer
+            RateLimit-Reset:
+              description: Seconds until the current window closes; the next request after that opens a new one.
+              schema:
+                type: integer
+            RateLimit-Policy:
+              description: 'The limit and the window in seconds, e.g. 60;w=60. The window is fixed: it opens at the key''s first request after the last one closed (DT-271), so a burst across two windows can pass more than the limit in one rolling minute.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Quote'
+        '400':
+          description: 'A parameter is not valid: details.problems names each field and what it accepts.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: No API key, an unknown one, or a revoked one.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: The key does not have this endpoint's scope.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No plan of yours has that id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: 'Too many requests for this key in the current minute (60); Retry-After and RateLimit-Reset say when to try again. On POST /campaigns and on POST /plans/current/lines when it starts a plan: the brand''s 3 new campaigns in 24 hours are used (details.reason daily_campaign_limit); details.resets_at and Retry-After say when the limit reopens, a rolling 24 hours from the first of them, not a calendar day; archiving or deleting a campaign does not give its slot back. On GET /creators and GET /creators/{id}: a creator read limit is used (details.reason per_minute, daily_lists, daily_reveals, daily_seen or locked). daily_seen is your workspace''s one pool of 300 creator views a day (300 different creators shown or opened since midnight UTC), shared by the app and every API key of the brand: details.scope workspace and details.limit 300; a creator already seen today, in the app or through any key, still opens and costs nothing. daily_lists is the day''s list calls (each GET /creators page or creators_search is one; details.limit, 60): it is counted apart from creator views, resets at midnight UTC, and Retry-After says when. daily_reveals is the day''s creator profiles opened (details.limit, 60). The other reasons are this key''s own limit (details.scope key) or the brand''s ceiling over all its keys (details.scope api).'
+          headers:
+            Retry-After:
+              schema:
+                type: integer
+            RateLimit-Limit:
+              description: Requests one window allows for this key.
+              schema:
+                type: integer
+            RateLimit-Remaining:
+              description: Requests left in the current window.
+              schema:
+                type: integer
+            RateLimit-Reset:
+              description: Seconds until the current window closes; the next request after that opens a new one.
+              schema:
+                type: integer
+            RateLimit-Policy:
+              description: 'The limit and the window in seconds, e.g. 60;w=60. The window is fixed: it opens at the key''s first request after the last one closed (DT-271), so a burst across two windows can pass more than the limit in one rolling minute.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: 'internal: the request failed on our side. Try again.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: 'unavailable: the service or this part of it is not reachable right now. Try again shortly.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Plans
+      operationId: getPlansByIdQuote
+      x-operation-id-source: derived
+  /plans/{id}/lines:
+    post:
+      summary: Add a creator
+      description: 'Add a creator to a plan awaiting approval by its unit_id (a format''s unit_id from creators_search or creator_get), at that format''s current all-in price, the same as the brand adding it in the workspace. Leave out plan_id (REST: POST /api/v1/plans/current/lines) to add to the brand''s newest plan awaiting approval, or to start a plan for this creator when none waits; that also needs the mandate to allow starting a campaign, and counts toward the brand''s 3 new campaigns in 24 hours. Only approved creators on sale can be added (not_approved otherwise). A creator who would take the plan''s all-in total over the mandate''s maximum plan total, or this month''s signed spend plus that total over its monthly cap, is refused (mandate_refused, over_max_plan_total or over_monthly_cap) and the plan is left as it was. A creator who would take the plan''s all-in total over its campaign''s budget is refused for everyone (conflict, reason over_budget, with budget_cents and remaining_cents, the room left before this creator) and the plan is left as it was; pick a creator priced within remaining_cents or remove one first. Returns the new line_id and the plan as plan_quote returns it. Needs an idempotency_key. Scope: campaigns:write. MCP tool: plan_add_creator.'
+      security:
+      - apiKey:
+        - campaigns:write
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          oneOf:
+          - type: string
+            format: uuid
+          - type: string
+            enum:
+            - current
+        description: 'A plan id, or current: the brand''s newest plan awaiting approval, or a new plan started for this creator.'
+      - name: Idempotency-Key
+        in: header
+        required: true
+        description: '8 to 128 letters, digits or . _ : -. Retry with the same key and the same request to get the same answer; it never runs twice.'
+        schema:
+          type: string
+          minLength: 8
+          maxLength: 128
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LineInput'
+      responses:
+        '200':
+          description: OK
+          headers:
+            RateLimit-Limit:
+              description: Requests one window allows for this key.
+              schema:
+                type: integer
+            RateLimit-Remaining:
+              description: Requests left in the current window.
+              schema:
+                type: integer
+            RateLimit-Reset:
+              description: Seconds until the current window closes; the next request after that opens a new one.
+              schema:
+                type: integer
+            RateLimit-Policy:
+              description: 'The limit and the window in seconds, e.g. 60;w=60. The window is fixed: it opens at the key''s first request after the last one closed (DT-271), so a burst across two windows can pass more than the limit in one rolling minute.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LineAdded'
+        '400':
+          description: 'A parameter is not valid: details.problems names each field and what it accepts.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: No API key, an unknown one, or a revoked one.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: The key lacks the scope, or the mandate refuses (mandate_refused, with the limit and how much over).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No plan, line or creator of yours has that id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: conflict (with a reason), idempotency_conflict, or in_progress (Retry-After).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: 'unprocessable: the body is readable but a value cannot be used (a blank or too long name, a campaign that cannot be planned yet); details.problems names each field when there are several.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: 'Too many requests for this key in the current minute (60); Retry-After and RateLimit-Reset say when to try again. On POST /campaigns and on POST /plans/current/lines when it starts a plan: the brand''s 3 new campaigns in 24 hours are used (details.reason daily_campaign_limit); details.resets_at and Retry-After say when the limit reopens, a rolling 24 hours from the first of them, not a calendar day; archiving or deleting a campaign does not give its slot back. On GET /creators and GET /creators/{id}: a creator read limit is used (details.reason per_minute, daily_lists, daily_reveals, daily_seen or locked). daily_seen is your workspace''s one pool of 300 creator views a day (300 different creators shown or opened since midnight UTC), shared by the app and every API key of the brand: details.scope workspace and details.limit 300; a creator already seen today, in the app or through any key, still opens and costs nothing. daily_lists is the day''s list calls (each GET /creators page or creators_search is one; details.limit, 60): it is counted apart from creator views, resets at midnight UTC, and Retry-After says when. daily_reveals is the day''s creator profiles opened (details.limit, 60). The other reasons are this key''s own limit (details.scope key) or the brand''s ceiling over all its keys (details.scope api).'
+          headers:
+            Retry-After:
+              schema:
+                type: integer
+            RateLimit-Limit:
+              description: Requests one window allows for this key.
+              schema:
+                type: integer
+            RateLimit-Remaining:
+              description: Requests left in the current window.
+              schema:
+                type: integer
+            RateLimit-Reset:
+              description: Seconds until the current window closes; the next request after that opens a new one.
+              schema:
+                type: integer
+            RateLimit-Policy:
+              description: 'The limit and the window in seconds, e.g. 60;w=60. The window is fixed: it opens at the key''s first request after the last one closed (DT-271), so a burst across two windows can pass more than the limit in one rolling minute.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: 'internal: the request failed on our side. Retry it with the same Idempotency-Key.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: 'unavailable: writes are not available right now (for an approval: payments are not open yet).'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Plans
+      operationId: postPlansByIdLines
+      x-operation-id-source: derived
+  /plans/{id}/lines/{line_id}:
+    delete:
+      summary: Remove a creator
+      description: 'Drop one line from a plan awaiting approval. A plan keeps at least one creator. Returns the plan as plan_quote returns it. Needs an idempotency_key. Scope: campaigns:write. MCP tool: plan_remove_creator.'
+      security:
+      - apiKey:
+        - campaigns:write
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: line_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Idempotency-Key
+        in: header
+        required: true
+        description: '8 to 128 letters, digits or . _ : -. Retry with the same key and the same request to get the same answer; it never runs twice.'
+        schema:
+          type: string
+          minLength: 8
+          maxLength: 128
+      responses:
+        '200':
+          description: OK
+          headers:
+            RateLimit-Limit:
+              description: Requests one window allows for this key.
+              schema:
+                type: integer
+            RateLimit-Remaining:
+              description: Requests left in the current window.
+              schema:
+                type: integer
+            RateLimit-Reset:
+              description: Seconds until the current window closes; the next request after that opens a new one.
+              schema:
+                type: integer
+            RateLimit-Policy:
+              description: 'The limit and the window in seconds, e.g. 60;w=60. The window is fixed: it opens at the key''s first request after the last one closed (DT-271), so a burst across two windows can pass more than the limit in one rolling minute.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LineRemoved'
+        '400':
+          description: 'A parameter is not valid: details.problems names each field and what it accepts.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: No API key, an unknown one, or a revoked one.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: The key lacks the scope, or the mandate refuses (mandate_refused, with the limit and how much over).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No plan, line or creator of yours has that id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: conflict (with a reason), idempotency_conflict, or in_progress (Retry-After).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: 'unprocessable: the body is readable but a value cannot be used (a blank or too long name, a campaign that cannot be planned yet); details.problems names each field when there are several.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: 'Too many requests for this key in the current minute (60); Retry-After and RateLimit-Reset say when to try again. On POST /campaigns and on POST /plans/current/lines when it starts a plan: the brand''s 3 new campaigns in 24 hours are used (details.reason daily_campaign_limit); details.resets_at and Retry-After say when the limit reopens, a rolling 24 hours from the first of them, not a calendar day; archiving or deleting a campaign does not give its slot back. On GET /creators and GET /creators/{id}: a creator read limit is used (details.reason per_minute, daily_lists, daily_reveals, daily_seen or locked). daily_seen is your workspace''s one pool of 300 creator views a day (300 different creators shown or opened since midnight UTC), shared by the app and every API key of the brand: details.scope workspace and details.limit 300; a creator already seen today, in the app or through any key, still opens and costs nothing. daily_lists is the day''s list calls (each GET /creators page or creators_search is one; details.limit, 60): it is counted apart from creator views, resets at midnight UTC, and Retry-After says when. daily_reveals is the day''s creator profiles opened (details.limit, 60). The other reasons are this key''s own limit (details.scope key) or the brand''s ceiling over all its keys (details.scope api).'
+          headers:
+            Retry-After:
+              schema:
+                type: integer
+            RateLimit-Limit:
+              description: Requests one window allows for this key.
+              schema:
+                type: integer
+            RateLimit-Remaining:
+              description: Requests left in the current window.
+              schema:
+                type: integer
+            RateLimit-Reset:
+              description: Seconds until the current window closes; the next request after that opens a new one.
+              schema:
+                type: integer
+            RateLimit-Policy:
+              description: 'The limit and the window in seconds, e.g. 60;w=60. The window is fixed: it opens at the key''s first request after the last one closed (DT-271), so a burst across two windows can pass more than the limit in one rolling minute.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: 'internal: the request failed on our side. Retry it with the same Idempotency-Key.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: 'unavailable: writes are not available right now (for an approval: payments are not open yet).'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Plans
+      operationId: deletePlansByIdLinesByLineId
+      x-operation-id-source: derived
+  /plans/{id}/lines/{line_id}/swap:
+    post:
+      summary: Swap a creator
+      description: 'Replace one line of a plan awaiting approval (line_id from plan_quote) with another creator''s format (unit_id from creators_search or creator_get) at its current all-in price, in one step: both happen or neither does, so the plan is never left with both creators or with none. The plan''s total after the swap must fit the key''s mandate and the campaign''s budget: a creator at or under the removed creator''s price always swaps in, a dearer one that would go over the budget is refused (conflict, reason over_budget, budget_cents, remaining_cents). A creator already on the plan is refused (already_in_plan); to change a creator''s format, remove the line and add the format. Returns the new line_id, the removed_line_id and the plan as plan_quote returns it. Needs an idempotency_key. Scope: campaigns:write. MCP tool: plan_swap_creator.'
+      security:
+      - apiKey:
+        - campaigns:write
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: line_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Idempotency-Key
+        in: header
+        required: true
+        description: '8 to 128 letters, digits or . _ : -. Retry with the same key and the same request to get the same answer; it never runs twice.'
+        schema:
+          type: string
+          minLength: 8
+          maxLength: 128
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LineInput'
+      responses:
+        '200':
+          description: OK
+          headers:
+            RateLimit-Limit:
+              description: Requests one window allows for this key.
+              schema:
+                type: integer
+            RateLimit-Remaining:
+              description: Requests left in the current window.
+              schema:
+                type: integer
+            RateLimit-Reset:
+              description: Seconds until the current window closes; the next request after that opens a new one.
+              schema:
+                type: integer
+            RateLimit-Policy:
+              description: 'The limit and the window in seconds, e.g. 60;w=60. The window is fixed: it opens at the key''s first request after the last one closed (DT-271), so a burst across two windows can pass more than the limit in one rolling minute.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LineSwapped'
+        '400':
+          description: 'A parameter is not valid: details.problems names each field and what it accepts.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: No API key, an unknown one, or a revoked one.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: The key lacks the scope, or the mandate refuses (mandate_refused, with the limit and how much over).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No plan, line or creator of yours has that id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: conflict (with a reason), idempotency_conflict, or in_progress (Retry-After).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: 'unprocessable: the body is readable but a value cannot be used (a blank or too long name, a campaign that cannot be planned yet); details.problems names each field when there are several.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: 'Too many requests for this key in the current minute (60); Retry-After and RateLimit-Reset say when to try again. On POST /campaigns and on POST /plans/current/lines when it starts a plan: the brand''s 3 new campaigns in 24 hours are used (details.reason daily_campaign_limit); details.resets_at and Retry-After say when the limit reopens, a rolling 24 hours from the first of them, not a calendar day; archiving or deleting a campaign does not give its slot back. On GET /creators and GET /creators/{id}: a creator read limit is used (details.reason per_minute, daily_lists, daily_reveals, daily_seen or locked). daily_seen is your workspace''s one pool of 300 creator views a day (300 different creators shown or opened since midnight UTC), shared by the app and every API key of the brand: details.scope workspace and details.limit 300; a creator already seen today, in the app or through any key, still opens and costs nothing. daily_lists is the day''s list calls (each GET /creators page or creators_search is one; details.limit, 60): it is counted apart from creator views, resets at midnight UTC, and Retry-After says when. daily_reveals is the day''s creator profiles opened (details.limit, 60). The other reasons are this key''s own limit (details.scope key) or the brand''s ceiling over all its keys (details.scope api).'
+          headers:
+            Retry-After:
+              schema:
+                type: integer
+            RateLimit-Limit:
+              description: Requests one window allows for this key.
+              schema:
+                type: integer
+            RateLimit-Remaining:
+              description: Requests left in the current window.
+              schema:
+                type: integer
+            RateLimit-Reset:
+              description: Seconds until the current window closes; the next request after that opens a new one.
+              schema:
+                type: integer
+            RateLimit-Policy:
+              description: 'The limit and the window in seconds, e.g. 60;w=60. The window is fixed: it opens at the key''s first request after the last one closed (DT-271), so a burst across two windows can pass more than the limit in one rolling minute.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: 'internal: the request failed on our side. Retry it with the same Idempotency-Key.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: 'unavailable: writes are not available right now (for an approval: payments are not open yet).'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Plans
+      operationId: postPlansByIdLinesByLineIdSwap
+      x-operation-id-source: derived
+  /plans/{id}/dates:
+    post:
+      summary: Move a plan's dates
+      description: 'Move a plan awaiting approval to new dates in one step: start and end (YYYY-MM-DD) become the plan''s launch window and the campaign''s dates, and every creator''s post date moves with them, keeping its place in the window (a post three days in stays three days in) and pulled inside the new window when it is shorter. Both happen or neither does. start is today or later, end is on or after start, at most a year apart (conflict, reason bad_dates); two posts by one creator that would land on the same day are refused (conflict, reason same_day) and nothing moves; a signed plan or one the team wrote is refused (conflict, reason plan_signed). Prices do not change. Returns lines_moved and the plan as plan_quote returns it. Needs an idempotency_key. Scope: campaigns:write. MCP tool: plan_move_dates.'
+      security:
+      - apiKey:
+        - campaigns:write
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Idempotency-Key
+        in: header
+        required: true
+        description: '8 to 128 letters, digits or . _ : -. Retry with the same key and the same request to get the same answer; it never runs twice.'
+        schema:
+          type: string
+          minLength: 8
+          maxLength: 128
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MoveDatesInput'
+      responses:
+        '200':
+          description: OK
+          headers:
+            RateLimit-Limit:
+              description: Requests one window allows for this key.
+              schema:
+                type: integer
+            RateLimit-Remaining:
+              description: Requests left in the current window.
+              schema:
+                type: integer
+            RateLimit-Reset:
+              description: Seconds until the current window closes; the next request after that opens a new one.
+              schema:
+                type: integer
+            RateLimit-Policy:
+              description: 'The limit and the window in seconds, e.g. 60;w=60. The window is fixed: it opens at the key''s first request after the last one closed (DT-271), so a burst across two windows can pass more than the limit in one rolling minute.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatesMoved'
+        '400':
+          description: 'A parameter is not valid: details.problems names each field and what it accepts.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: No API key, an unknown one, or a revoked one.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: The key lacks the scope, or the mandate refuses (mandate_refused, with the limit and how much over).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No plan, line or creator of yours has that id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: conflict (with a reason), idempotency_conflict, or in_progress (Retry-After).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: 'unprocessable: the body is readable but a value cannot be used (a blank or too long name, a campaign that cannot be planned yet); details.problems names each field when there are several.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: 'Too many requests for this key in the current minute (60); Retry-After and RateLimit-Reset say when to try again. On POST /campaigns and on POST /plans/current/lines when it starts a plan: the brand''s 3 new campaigns in 24 hours are used (details.reason daily_campaign_limit); details.resets_at and Retry-After say when the limit reopens, a rolling 24 hours from the first of them, not a calendar day; archiving or deleting a campaign does not give its slot back. On GET /creators and GET /creators/{id}: a creator read limit is used (details.reason per_minute, daily_lists, daily_reveals, daily_seen or locked). daily_seen is your workspace''s one pool of 300 creator views a day (300 different creators shown or opened since midnight UTC), shared by the app and every API key of the brand: details.scope workspace and details.limit 300; a creator already seen today, in the app or through any key, still opens and costs nothing. daily_lists is the day''s list calls (each GET /creators page or creators_search is one; details.limit, 60): it is counted apart from creator views, resets at midnight UTC, and Retry-After says when. daily_reveals is the day''s creator profiles opened (details.limit, 60). The other reasons are this key''s own limit (details.scope key) or the brand''s ceiling over all its keys (details.scope api).'
+          headers:
+            Retry-After:
+              schema:
+                type: integer
+            RateLimit-Limit:
+              description: Requests one window allows for this key.
+              schema:
+                type: integer
+            RateLimit-Remaining:
+              description: Requests left in the current window.
+              schema:
+                type: integer
+            RateLimit-Reset:
+              description: Seconds until the current window closes; the next request after that opens a new one.
+              schema:
+                type: integer
+            RateLimit-Policy:
+              description: 'The limit and the window in seconds, e.g. 60;w=60. The window is fixed: it opens at the key''s first request after the last one closed (DT-271), so a burst across two windows can pass more than the limit in one rolling minute.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: 'internal: the request failed on our side. Retry it with the same Idempotency-Key.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: 'unavailable: writes are not available right now (for an approval: payments are not open yet).'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Plans
+      operationId: postPlansByIdDates
+      x-operation-id-source: derived
+  /plans/{id}/approve:
+    post:
+      summary: Approve and get the pay link
+      description: 'Sign a plan at the terms_fingerprint from plan_quote, under the brand terms a person at the brand accepted for this key, and get the Stripe Checkout link the brand or its finance person pays (card or Link up to $10,000, US bank account at any size). Only inside the key''s mandate: a refusal names the limit (no mandate, expired, signing not allowed, terms not accepted, channel, plan maximum, monthly cap) and how much over, so you can take it to a person. A plan that changed since the quote is refused with terms_changed: quote again. A plan over the campaign''s budget is refused with over_budget and its over_by_cents, always: nobody can approve an overage, the brand included, so remove a creator or ask a person at the brand to raise the budget, then quote again. Signing a signed plan returns its order and resumes payment; it never signs twice. Needs an idempotency_key. Scope: plans:approve. MCP tool: approve_plan.'
+      security:
+      - apiKey:
+        - plans:approve
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: Idempotency-Key
+        in: header
+        required: true
+        description: '8 to 128 letters, digits or . _ : -. Retry with the same key and the same request to get the same answer; it never runs twice.'
+        schema:
+          type: string
+          minLength: 8
+          maxLength: 128
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApproveInput'
+      responses:
+        '200':
+          description: OK
+          headers:
+            RateLimit-Limit:
+              description: Requests one window allows for this key.
+              schema:
+                type: integer
+            RateLimit-Remaining:
+              description: Requests left in the current window.
+              schema:
+                type: integer
+            RateLimit-Reset:
+              description: Seconds until the current window closes; the next request after that opens a new one.
+              schema:
+                type: integer
+            RateLimit-Policy:
+              description: 'The limit and the window in seconds, e.g. 60;w=60. The window is fixed: it opens at the key''s first request after the last one closed (DT-271), so a burst across two windows can pass more than the limit in one rolling minute.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Approved'
+        '400':
+          description: 'A parameter is not valid: details.problems names each field and what it accepts.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: No API key, an unknown one, or a revoked one.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: The key lacks the scope, or the mandate refuses (mandate_refused, with the limit and how much over).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: No plan, line or creator of yours has that id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: conflict (with a reason), idempotency_conflict, or in_progress (Retry-After).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '422':
+          description: 'unprocessable: the body is readable but a value cannot be used (a blank or too long name, a campaign that cannot be planned yet); details.problems names each field when there are several.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: 'Too many requests for this key in the current minute (60); Retry-After and RateLimit-Reset say when to try again. On POST /campaigns and on POST /plans/current/lines when it starts a plan: the brand''s 3 new campaigns in 24 hours are used (details.reason daily_campaign_limit); details.resets_at and Retry-After say when the limit reopens, a rolling 24 hours from the first of them, not a calendar day; archiving or deleting a campaign does not give its slot back. On GET /creators and GET /creators/{id}: a creator read limit is used (details.reason per_minute, daily_lists, daily_reveals, daily_seen or locked). daily_seen is your workspace''s one pool of 300 creator views a day (300 different creators shown or opened since midnight UTC), shared by the app and every API key of the brand: details.scope workspace and details.limit 300; a creator already seen today, in the app or through any key, still opens and costs nothing. daily_lists is the day''s list calls (each GET /creators page or creators_search is one; details.limit, 60): it is counted apart from creator views, resets at midnight UTC, and Retry-After says when. daily_reveals is the day''s creator profiles opened (details.limit, 60). The other reasons are this key''s own limit (details.scope key) or the brand''s ceiling over all its keys (details.scope api).'
+          headers:
+            Retry-After:
+              schema:
+                type: integer
+            RateLimit-Limit:
+              description: Requests one window allows for this key.
+              schema:
+                type: integer
+            RateLimit-Remaining:
+              description: Requests left in the current window.
+              schema:
+                type: integer
+            RateLimit-Reset:
+              description: Seconds until the current window closes; the next request after that opens a new one.
+              schema:
+                type: integer
+            RateLimit-Policy:
+              description: 'The limit and the window in seconds, e.g. 60;w=60. The window is fixed: it opens at the key''s first request after the last one closed (DT-271), so a burst across two windows can pass more than the limit in one rolling minute.'
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: 'internal: the request failed on our side. Retry it with the same Idempotency-Key.'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: 'unavailable: writes are not available right now (for an approval: payments are not open yet).'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      tags:
+      - Plans
+      operationId: postPlansByIdApprove
+      x-operation-id-source: derived
+components:
+  schemas:
+    PaymentOption:
+      type: object
+      properties:
+        rail:
+          type: string
+          enum:
+          - checkout
+          - invoice
+        label:
+          type: string
+        clears:
+          type: string
+      required:
+      - rail
+      - label
+      - clears
+      additionalProperties: false
+    DatesMoved:
+      type: object
+      properties:
+        lines_moved:
+          type: integer
+          description: How many creators' post dates moved.
+        plan:
+          $ref: '#/components/schemas/Quote'
+      required:
+      - lines_moved
+      - plan
+      additionalProperties: false
+    Error:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              enum:
+              - bad_request
+              - filter_required
+              - unauthorized
+              - forbidden
+              - not_found
+              - method_not_allowed
+              - rate_limited
+              - unavailable
+              - internal
+              - mandate_refused
+              - conflict
+              - unprocessable
+              - idempotency_conflict
+              - in_progress
+            message:
+              type: string
+            details:
+              type: object
+              description: 'Machine-readable facts. mandate_refused: reason (no_mandate, mandate_expired, channel_not_allowed, approval_not_allowed, terms_not_accepted, over_max_plan_total, over_monthly_cap, over_budget), limit_cents, requested_cents, over_by_cents, spent_cents, and escalate: true (take it to a person at the brand). conflict: reason; for over_budget on plan_add_creator or plan_swap_creator also budget_cents, remaining_cents (the room the plan had before the creator), price_cents and over_by_cents. unprocessable: problems, each a field and a message.'
+          required:
+          - code
+          - message
+          additionalProperties: false
+      required:
+      - error
+      additionalProperties: false
+    QuoteLine:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        creator:
+          oneOf:
+          - type: 'null'
+          - type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: The creator's id, for creator_get. Left out when not known.
+              name:
+                type:
+                - string
+                - 'null'
+              handle:
+                type:
+                - string
+                - 'null'
+                description: The creator's X handle (every creator on a plan line is approved, so it is named before payment).
+              profile_url:
+                type:
+                - string
+                - 'null'
+                description: The creator's X profile link (every creator on a plan line is approved, so it is named before payment).
+              avatar_url:
+                type: string
+                format: uri
+                description: The creator's live profile photo. Left out when there is none.
+              followers:
+                type: integer
+                minimum: 0
+                description: The creator's follower count on the channel. Left out when not measured.
+            required:
+            - name
+            - handle
+            - profile_url
+            additionalProperties: false
+        creator_id:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: The creator's id at the top level (the same as creator.id); null when not known.
+        unit_id:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        stage_id:
+          type: string
+          enum:
+          - planned
+          - offered
+          - creator_confirmed
+          - scheduled
+          - live
+          - proof_attached
+          - cancelled
+          description: Where this post stands; the same stage model as a campaign's lines_by_stage. Branch on this, never on stage.
+        stage:
+          type: string
+          description: 'The label for stage_id: Planned, Offered, Creator confirmed, Scheduled, Live, Proof attached, Cancelled.'
+        channel:
+          type: string
+        channel_label:
+          type: string
+        format:
+          type:
+          - string
+          - 'null'
+        deliverable:
+          type: string
+        scheduled_date:
+          type: string
+          format: date
+        price_cents:
+          type: integer
+          description: The all-in price of this line. Never split into parts.
+        review:
+          type:
+          - string
+          - 'null'
+          description: 'The creator''s review state in brand words: Approved, or Under review. Null for a line with no creator yet.'
+        vetting:
+          type:
+          - string
+          - 'null'
+          deprecated: true
+          x-sunset: '2026-11-20'
+          description: 'Deprecated: the same value as review. Removed on 2026-11-20; read review.'
+        reason:
+          type:
+          - string
+          - 'null'
+        expected_views_low:
+          type:
+          - integer
+          - 'null'
+        expected_views_high:
+          type:
+          - integer
+          - 'null'
+        on_sale:
+          type: boolean
+      required:
+      - id
+      - creator
+      - creator_id
+      - unit_id
+      - stage_id
+      - stage
+      - channel
+      - channel_label
+      - format
+      - deliverable
+      - scheduled_date
+      - price_cents
+      - review
+      - vetting
+      - reason
+      - expected_views_low
+      - expected_views_high
+      - on_sale
+      additionalProperties: false
+    LineRemoved:
+      type: object
+      properties:
+        removed_line_id:
+          type: string
+          format: uuid
+        plan:
+          $ref: '#/components/schemas/Quote'
+      required:
+      - removed_line_id
+      - plan
+      additionalProperties: false
+    LineInput:
+      type: object
+      properties:
+        unit_id:
+          type: string
+          format: uuid
+          description: A format's unit_id from /creators.
+      required:
+      - unit_id
+      additionalProperties: false
+    LineSwapped:
+      type: object
+      properties:
+        line_id:
+          type: string
+          format: uuid
+        removed_line_id:
+          type: string
+          format: uuid
+        plan:
+          $ref: '#/components/schemas/Quote'
+      required:
+      - line_id
+      - removed_line_id
+      - plan
+      additionalProperties: false
+    Mandate:
+      type:
+      - object
+      - 'null'
+      properties:
+        key_id:
+          type: string
+          format: uuid
+        version:
+          type: integer
+        max_plan_cents:
+          type: integer
+        monthly_cap_cents:
+          type: integer
+        channels:
+          type: array
+          items:
+            type: string
+        may_approve:
+          type: boolean
+        may_exceed_budget:
+          type: boolean
+          deprecated: true
+          description: 'Retired, always false. No key and no person can approve a plan over its campaign''s budget: approve_plan refuses it with over_budget until a creator is removed or the budget is raised.'
+        expires_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        spent_this_month_cents:
+          type: integer
+        terms_version:
+          type:
+          - string
+          - 'null'
+          description: The brand terms a person accepted for this key. Null on a mandate that may not sign (the terms govern signing) and on the workspace's own agent key.
+        terms_accepted_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        terms_accepted_email:
+          type:
+          - string
+          - 'null'
+    Approved:
+      type: object
+      properties:
+        plan_id:
+          type: string
+          format: uuid
+        status:
+          const: approved
+        approved_at:
+          type: string
+          format: date-time
+        already_signed:
+          type: boolean
+        order:
+          type:
+          - object
+          - 'null'
+        payment:
+          type: object
+          properties:
+            next:
+              type: string
+              enum:
+              - checkout
+              - invoice_sent
+              - team_invoice
+              - none
+              - retry
+            pay_url:
+              type:
+              - string
+              - 'null'
+              description: The Stripe Checkout link the brand or its finance person pays.
+            options:
+              type: array
+              items:
+                $ref: '#/components/schemas/PaymentOption'
+    MoveDatesInput:
+      type: object
+      properties:
+        start:
+          type: string
+          format: date
+          description: The new first day, YYYY-MM-DD, today or later.
+        end:
+          type: string
+          format: date
+          description: The new last day, YYYY-MM-DD, on or after start, at most a year later.
+      required:
+      - start
+      - end
+      additionalProperties: false
+    ApproveInput:
+      type: object
+      properties:
+        terms_fingerprint:
+          type: string
+          pattern: ^[0-9a-f]{64}$
+          description: The terms_fingerprint from /plans/{id}/quote.
+        confirm_over_budget_cents:
+          type: integer
+          deprecated: true
+          description: 'Retired and ignored if sent. No plan over its campaign''s budget is approved, so nothing confirms an overage: remove a creator or raise the budget.'
+      required:
+      - terms_fingerprint
+      additionalProperties: false
+    LineAdded:
+      type: object
+      properties:
+        line_id:
+          type: string
+          format: uuid
+        plan:
+          $ref: '#/components/schemas/Quote'
+      required:
+      - line_id
+      - plan
+      additionalProperties: false
+    Quote:
+      type: object
+      description: A plan as the person sees it and as an agent signs it (v1-product-spec 8.5 Quote).
+      properties:
+        plan_id:
+          type: string
+          format: uuid
+        campaign_id:
+          type: string
+          format: uuid
+        version:
+          type: integer
+        status:
+          type: string
+          enum:
+          - awaiting_approval
+          - approved
+        currency:
+          type: string
+        launch_window_start:
+          type: string
+          format: date
+        launch_window_end:
+          type: string
+          format: date
+        terms_fingerprint:
+          type: string
+          description: Send exactly this to approve. It changes when a line, a price or the dates change.
+        total_cents:
+          type: integer
+        totals:
+          type: object
+          description: creators, total_cents, views_low, views_high, unmeasured, cpm_low_cents, cpm_high_cents, tiers, budget_cents, remaining_cents.
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuoteLine'
+        payment_options:
+          type: array
+          items:
+            $ref: '#/components/schemas/PaymentOption'
+        agent_payment:
+          type: string
+          enum:
+          - checkout
+          - team_invoice
+        brand_terms:
+          type: object
+          properties:
+            current_version:
+              type:
+              - string
+              - 'null'
+              description: The current brand terms version id (a date).
+            current_number:
+              type:
+              - integer
+              - 'null'
+              description: The number the app shows for that version (version 3).
+            url:
+              type:
+              - string
+              - 'null'
+            accepted_for_this_key:
+              type:
+              - string
+              - 'null'
+            accepted_number_for_this_key:
+              type:
+              - integer
+              - 'null'
+          required:
+          - current_version
+          - current_number
+          - url
+          - accepted_for_this_key
+          - accepted_number_for_this_key
+          additionalProperties: false
+        mandate:
+          $ref: '#/components/schemas/Mandate'
+        policy:
+          type: object
+          description: 'allowed: whether this key''s mandate lets it sign now; refusal: the reason and numbers when not (over_budget when the plan is over the campaign''s budget, which no mandate can approve: remove a creator or have the brand raise the budget).'
+          properties:
+            allowed:
+              type: boolean
+            refusal:
+              type:
+              - object
+              - 'null'
+        blocked_lines:
+          type: array
+          items:
+            type: string
+            format: uuid
+        over_budget:
+          type:
+          - object
+          - 'null'
+          description: 'The plan over its campaign''s budget: budget_cents, total_cents and over_by_cents, at current prices when a creator''s price rose past the budget (the plan then keeps its earlier prices, so total_cents alone reads as within it). Null within the budget, with no budget, or once signed. Approval refuses it until a creator is removed or the budget is raised.'
+          properties:
+            budget_cents:
+              type: integer
+            total_cents:
+              type: integer
+            over_by_cents:
+              type: integer
+        order:
+          type:
+          - object
+          - 'null'
+        valid_while:
+          const: terms_fingerprint_unchanged
+  securitySchemes:
+    apiKey:
+      type: http
+      scheme: bearer
+      description: 'An API key from the workspace. Scopes: inventory:read (Network coverage for your audience), audience:read (Audience fit for a campaign or a profile), campaigns:read (Campaigns and where each stands), evidence:read (Proof of each paid post), results:read (Results of each paid post), brain:read (Your company context), creators:read (Approved creators on sale, by name, with price per format), campaigns:write (Start campaigns and change the creators on a plan, within its mandate), plans:approve (Sign a plan and get its payment link, within its mandate). Rate limit: 60 requests a minute per key.'

@@ -1,0 +1,59 @@
+{
+  "provider": "distribution-tech",
+  "sources": [
+    "distribution-tech-openapi.json"
+  ],
+  "outputs": [
+    "distribution-tech-audience-api-openapi.yml",
+    "distribution-tech-brain-api-openapi.yml",
+    "distribution-tech-campaigns-api-openapi.yml",
+    "distribution-tech-creators-api-openapi.yml",
+    "distribution-tech-evidence-api-openapi.yml",
+    "distribution-tech-feedback-api-openapi.yml",
+    "distribution-tech-inventory-api-openapi.yml",
+    "distribution-tech-plans-api-openapi.yml",
+    "distribution-tech-results-api-openapi.yml"
+  ],
+  "archived": [
+    "archived openapi/distribution-tech-openapi.json"
+  ],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "distribution-tech-openapi.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "distribution-tech-openapi.json: tagged paths GET /inventory -> Inventory",
+    "distribution-tech-openapi.json: tagged paths GET /audience -> Audience",
+    "distribution-tech-openapi.json: tagged paths GET /campaigns -> Campaigns",
+    "distribution-tech-openapi.json: tagged paths POST /campaigns -> Campaigns",
+    "distribution-tech-openapi.json: tagged paths GET /plans/{id}/quote -> Plans",
+    "distribution-tech-openapi.json: tagged paths POST /plans/{id}/lines -> Plans",
+    "distribution-tech-openapi.json: tagged paths DELETE /plans/{id}/lines/{line_id} -> Plans",
+    "distribution-tech-openapi.json: tagged paths POST /plans/{id}/lines/{line_id}/swap -> Plans",
+    "distribution-tech-openapi.json: tagged paths POST /plans/{id}/dates -> Plans",
+    "distribution-tech-openapi.json: tagged paths POST /plans/{id}/approve -> Plans",
+    "distribution-tech-openapi.json: tagged paths POST /campaigns/{id}/creator-guidelines -> Campaigns",
+    "distribution-tech-openapi.json: tagged paths GET /campaigns/{id} -> Campaigns",
+    "distribution-tech-openapi.json: tagged paths PATCH /campaigns/{id} -> Campaigns",
+    "distribution-tech-openapi.json: tagged paths DELETE /campaigns/{id} -> Campaigns",
+    "distribution-tech-openapi.json: tagged paths POST /campaigns/{id}/archive -> Campaigns",
+    "distribution-tech-openapi.json: tagged paths GET /evidence -> Evidence",
+    "distribution-tech-openapi.json: tagged paths GET /results -> Results",
+    "distribution-tech-openapi.json: tagged paths GET /creators -> Creators",
+    "distribution-tech-openapi.json: tagged paths GET /creators/{id} -> Creators",
+    "distribution-tech-openapi.json: tagged paths POST /creators/{id}/price-request -> Creators",
+    "distribution-tech-openapi.json: tagged paths GET /feedback -> Feedback",
+    "distribution-tech-openapi.json: tagged paths POST /feedback -> Feedback",
+    "distribution-tech-openapi.json: tagged paths GET /brain -> Brain",
+    "distribution-tech-openapi.json: declared missing tag: Audience",
+    "distribution-tech-openapi.json: declared missing tag: Brain",
+    "distribution-tech-openapi.json: declared missing tag: Campaigns",
+    "distribution-tech-openapi.json: declared missing tag: Creators",
+    "distribution-tech-openapi.json: declared missing tag: Evidence",
+    "distribution-tech-openapi.json: declared missing tag: Feedback",
+    "distribution-tech-openapi.json: declared missing tag: Inventory",
+    "distribution-tech-openapi.json: declared missing tag: Plans",
+    "distribution-tech-openapi.json: declared missing tag: Results",
+    "apis.yml register: written (+9 apis, 9 total)"
+  ],
+  "skipped": []
+}

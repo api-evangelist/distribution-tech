@@ -1,0 +1,436 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/distribution-tech/main/json-schema/distribution-tech-quote-schema.json",
+  "title": "Quote",
+  "description": "A plan as the person sees it and as an agent signs it (v1-product-spec 8.5 Quote).",
+  "x-generated": "2026-10-22",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/distribution-tech-openapi.json#/components/schemas/Quote",
+  "type": "object",
+  "properties": {
+    "plan_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "campaign_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "version": {
+      "type": "integer"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "awaiting_approval",
+        "approved"
+      ]
+    },
+    "currency": {
+      "type": "string"
+    },
+    "launch_window_start": {
+      "type": "string",
+      "format": "date"
+    },
+    "launch_window_end": {
+      "type": "string",
+      "format": "date"
+    },
+    "terms_fingerprint": {
+      "type": "string",
+      "description": "Send exactly this to approve. It changes when a line, a price or the dates change."
+    },
+    "total_cents": {
+      "type": "integer"
+    },
+    "totals": {
+      "type": "object",
+      "description": "creators, total_cents, views_low, views_high, unmeasured, cpm_low_cents, cpm_high_cents, tiers, budget_cents, remaining_cents."
+    },
+    "lines": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/QuoteLine"
+      }
+    },
+    "payment_options": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/PaymentOption"
+      }
+    },
+    "agent_payment": {
+      "type": "string",
+      "enum": [
+        "checkout",
+        "team_invoice"
+      ]
+    },
+    "brand_terms": {
+      "type": "object",
+      "properties": {
+        "current_version": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The current brand terms version id (a date)."
+        },
+        "current_number": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "The number the app shows for that version (version 3)."
+        },
+        "url": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "accepted_for_this_key": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "accepted_number_for_this_key": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "current_version",
+        "current_number",
+        "url",
+        "accepted_for_this_key",
+        "accepted_number_for_this_key"
+      ],
+      "additionalProperties": false
+    },
+    "mandate": {
+      "$ref": "#/$defs/Mandate"
+    },
+    "policy": {
+      "type": "object",
+      "description": "allowed: whether this key's mandate lets it sign now; refusal: the reason and numbers when not (over_budget when the plan is over the campaign's budget, which no mandate can approve: remove a creator or have the brand raise the budget).",
+      "properties": {
+        "allowed": {
+          "type": "boolean"
+        },
+        "refusal": {
+          "type": [
+            "object",
+            "null"
+          ]
+        }
+      }
+    },
+    "blocked_lines": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      }
+    },
+    "over_budget": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "The plan over its campaign's budget: budget_cents, total_cents and over_by_cents, at current prices when a creator's price rose past the budget (the plan then keeps its earlier prices, so total_cents alone reads as within it). Null within the budget, with no budget, or once signed. Approval refuses it until a creator is removed or the budget is raised.",
+      "properties": {
+        "budget_cents": {
+          "type": "integer"
+        },
+        "total_cents": {
+          "type": "integer"
+        },
+        "over_by_cents": {
+          "type": "integer"
+        }
+      }
+    },
+    "order": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "valid_while": {
+      "const": "terms_fingerprint_unchanged"
+    }
+  },
+  "$defs": {
+    "Mandate": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "key_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "version": {
+          "type": "integer"
+        },
+        "max_plan_cents": {
+          "type": "integer"
+        },
+        "monthly_cap_cents": {
+          "type": "integer"
+        },
+        "channels": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "may_approve": {
+          "type": "boolean"
+        },
+        "may_exceed_budget": {
+          "type": "boolean",
+          "deprecated": true,
+          "description": "Retired, always false. No key and no person can approve a plan over its campaign's budget: approve_plan refuses it with over_budget until a creator is removed or the budget is raised."
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "spent_this_month_cents": {
+          "type": "integer"
+        },
+        "terms_version": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The brand terms a person accepted for this key. Null on a mandate that may not sign (the terms govern signing) and on the workspace's own agent key."
+        },
+        "terms_accepted_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "terms_accepted_email": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "PaymentOption": {
+      "type": "object",
+      "properties": {
+        "rail": {
+          "type": "string",
+          "enum": [
+            "checkout",
+            "invoice"
+          ]
+        },
+        "label": {
+          "type": "string"
+        },
+        "clears": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "rail",
+        "label",
+        "clears"
+      ],
+      "additionalProperties": false
+    },
+    "QuoteLine": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "creator": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "format": "uuid",
+                  "description": "The creator's id, for creator_get. Left out when not known."
+                },
+                "name": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "handle": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The creator's X handle (every creator on a plan line is approved, so it is named before payment)."
+                },
+                "profile_url": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The creator's X profile link (every creator on a plan line is approved, so it is named before payment)."
+                },
+                "avatar_url": {
+                  "type": "string",
+                  "format": "uri",
+                  "description": "The creator's live profile photo. Left out when there is none."
+                },
+                "followers": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "description": "The creator's follower count on the channel. Left out when not measured."
+                }
+              },
+              "required": [
+                "name",
+                "handle",
+                "profile_url"
+              ],
+              "additionalProperties": false
+            }
+          ]
+        },
+        "creator_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uuid",
+          "description": "The creator's id at the top level (the same as creator.id); null when not known."
+        },
+        "unit_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uuid"
+        },
+        "stage_id": {
+          "type": "string",
+          "enum": [
+            "planned",
+            "offered",
+            "creator_confirmed",
+            "scheduled",
+            "live",
+            "proof_attached",
+            "cancelled"
+          ],
+          "description": "Where this post stands; the same stage model as a campaign's lines_by_stage. Branch on this, never on stage."
+        },
+        "stage": {
+          "type": "string",
+          "description": "The label for stage_id: Planned, Offered, Creator confirmed, Scheduled, Live, Proof attached, Cancelled."
+        },
+        "channel": {
+          "type": "string"
+        },
+        "channel_label": {
+          "type": "string"
+        },
+        "format": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "deliverable": {
+          "type": "string"
+        },
+        "scheduled_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "price_cents": {
+          "type": "integer",
+          "description": "The all-in price of this line. Never split into parts."
+        },
+        "review": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The creator's review state in brand words: Approved, or Under review. Null for a line with no creator yet."
+        },
+        "vetting": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "deprecated": true,
+          "x-sunset": "2026-11-20",
+          "description": "Deprecated: the same value as review. Removed on 2026-11-20; read review."
+        },
+        "reason": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "expected_views_low": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "expected_views_high": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "on_sale": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "creator",
+        "creator_id",
+        "unit_id",
+        "stage_id",
+        "stage",
+        "channel",
+        "channel_label",
+        "format",
+        "deliverable",
+        "scheduled_date",
+        "price_cents",
+        "review",
+        "vetting",
+        "reason",
+        "expected_views_low",
+        "expected_views_high",
+        "on_sale"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

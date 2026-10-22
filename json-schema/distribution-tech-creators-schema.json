@@ -1,0 +1,682 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/distribution-tech/main/json-schema/distribution-tech-creators-schema.json",
+  "title": "Creators",
+  "x-generated": "2026-10-22",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/distribution-tech-openapi.json#/components/schemas/Creators",
+  "type": "object",
+  "properties": {
+    "total": {
+      "type": "integer",
+      "description": "How many creators this answer lists: the shortlist, never a count of the network."
+    },
+    "priced": {
+      "type": "integer",
+      "description": "How many of total are bookable now by the one rule in the API description (What bookable means); the rest carry price_estimate, never a price."
+    },
+    "catalog": {
+      "type": "object",
+      "description": "The whole network, whatever this call filtered: the same counts as the app and the site (GET /api/network/facts on the app host), refreshed at most every five minutes. Left out when the network cannot be counted right now, never guessed.",
+      "required": [
+        "approved",
+        "priced"
+      ],
+      "properties": {
+        "approved": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Every approved, verified, active creator in the network, priced or not."
+        },
+        "priced": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Of those, the creators bookable now by the one rule in the API description (What bookable means): the number the app and the site show."
+        }
+      }
+    },
+    "cap": {
+      "type": "integer",
+      "description": "How many creators the selection holds (the same as total)."
+    },
+    "limit": {
+      "type": "integer",
+      "description": "This page's size: default 24, at most 50."
+    },
+    "offset": {
+      "type": "integer",
+      "description": "Where this page starts, at most total (an offset past the end is answered as total); the next page starts at offset + limit while it is below total."
+    },
+    "creators": {
+      "type": "array",
+      "description": "Summary rows, best fits first by score and in the order asked for: no posts; handle and url set for an approved creator, null otherwise. GET /creators/{id} (creator_get) opens one in full.",
+      "items": {
+        "$ref": "#/$defs/CreatorSummary"
+      }
+    }
+  },
+  "$defs": {
+    "CreatorSummary": {
+      "type": "object",
+      "description": "A creator in a list: the Creator fields without recent_posts and posts_summary (handle and url as on Creator: set for an approved creator, null otherwise), and collaborations without their link (DT-127).",
+      "properties": {
+        "provenance": {
+          "type": "object",
+          "description": "DT-159: where each of the creator's measured numbers came from, one entry per stat (served since DT-159; documented from 1.25.2, DT-160).",
+          "properties": {
+            "followers": {
+              "type": "object",
+              "description": "DT-159: where this number came from: source, method, measured_at, expires_at, label (Verified, Creator-reported or Estimated), stale, and as_of text.",
+              "properties": {
+                "source": {
+                  "type": "string"
+                },
+                "method": {
+                  "type": "string"
+                },
+                "measured_at": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "expires_at": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "Verified",
+                    "Creator-reported",
+                    "Estimated"
+                  ]
+                },
+                "stale": {
+                  "type": "boolean"
+                },
+                "as_of": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            },
+            "median_views_30d": {
+              "type": "object",
+              "description": "DT-159: where this number came from: source, method, measured_at, expires_at, label (Verified, Creator-reported or Estimated), stale, and as_of text.",
+              "properties": {
+                "source": {
+                  "type": "string"
+                },
+                "method": {
+                  "type": "string"
+                },
+                "measured_at": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "expires_at": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "Verified",
+                    "Creator-reported",
+                    "Estimated"
+                  ]
+                },
+                "stale": {
+                  "type": "boolean"
+                },
+                "as_of": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            },
+            "engagement_rate_30d": {
+              "type": "object",
+              "description": "DT-159: where this number came from: source, method, measured_at, expires_at, label (Verified, Creator-reported or Estimated), stale, and as_of text.",
+              "properties": {
+                "source": {
+                  "type": "string"
+                },
+                "method": {
+                  "type": "string"
+                },
+                "measured_at": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "expires_at": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "Verified",
+                    "Creator-reported",
+                    "Estimated"
+                  ]
+                },
+                "stale": {
+                  "type": "boolean"
+                },
+                "as_of": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "handle": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The creator's X handle for every approved creator (status approved), before purchase; null for any other creator."
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The creator's X profile link, whenever handle is set; null otherwise, as handle."
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "approved",
+            "borderline",
+            "not_reviewed",
+            "declined"
+          ]
+        },
+        "status_label": {
+          "type": "string"
+        },
+        "status_reason": {
+          "type": "string"
+        },
+        "in_automatic_plans": {
+          "type": "boolean"
+        },
+        "match_score": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "match_label": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "on_sale": {
+          "type": "boolean"
+        },
+        "reach_band": {
+          "type": "string",
+          "enum": [
+            "nano",
+            "micro",
+            "mid",
+            "macro",
+            "mega"
+          ],
+          "description": "The creator's size by followers, smallest to largest."
+        },
+        "median_views_30d": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "deprecated": true,
+          "x-sunset": "2027-01-11",
+          "description": "Deprecated: the same number as median_views_30d_network. Removed on 2027-01-11; read median_views_30d_network."
+        },
+        "median_views_30d_network": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Median views per post over the creator's last 30 days, as the network measures it across all their posts. Prices, expected views and format advice use this number. It can differ from posts_summary.posts_sample_median_views, which covers only the posts we hold."
+        },
+        "followers": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "X followers, as the network last measured them. Null when not measured."
+        },
+        "verified_badge": {
+          "type": [
+            "boolean",
+            "null"
+          ],
+          "description": "Whether the account carries the X blue check. Null when unknown."
+        },
+        "country": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The country or region X shows on the account's About panel. Null when X shows none; never inferred."
+        },
+        "language": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The language the creator posts in, as a name (for example English). Null when unknown."
+        },
+        "segments": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "bio": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "positioning": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "One line on who the creator is, taken from their own bio (never written by us); null when the bio has none."
+        },
+        "avatar_url": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "ask_price": {
+          "type": "boolean",
+          "description": "true when nothing is on sale for this creator: the action is Ask for a price (creator_ask_price, POST /creators/{id}/price-request), which asks our team, never the creator; price_estimate is an estimate, never a price. false when a format is on sale: add it from offerings with plan_add_creator."
+        },
+        "price_estimate": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "description": "For a creator with nothing on sale: an estimated price range from its metrics (the ERP's suggested budget band), never a price; null when it has a price. Ask for a price (creator_ask_price, POST /creators/{id}/price-request) asks our team for a real one; the creator is never contacted directly.",
+          "properties": {
+            "min_usd": {
+              "type": "integer"
+            },
+            "max_usd": {
+              "type": "integer"
+            },
+            "label": {
+              "type": "string",
+              "description": "As the app shows it, e.g. \"Est. $1,200 to $2,500\" (\"to\", never a dash)."
+            },
+            "provenance": {
+              "type": "object",
+              "description": "DT-159: where this number came from: source, method, measured_at, expires_at, label (Verified, Creator-reported or Estimated), stale, and as_of text.",
+              "properties": {
+                "source": {
+                  "type": "string"
+                },
+                "method": {
+                  "type": "string"
+                },
+                "measured_at": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "expires_at": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "label": {
+                  "type": "string",
+                  "enum": [
+                    "Verified",
+                    "Creator-reported",
+                    "Estimated"
+                  ]
+                },
+                "stale": {
+                  "type": "boolean"
+                },
+                "as_of": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            },
+            "calc": {
+              "type": "object",
+              "description": "How this number was made (DT-117): the calculation version and its inputs, the same on every surface. Never a cost or a fee.",
+              "properties": {
+                "calc_version": {
+                  "type": "string"
+                },
+                "inputs": {
+                  "type": "object"
+                }
+              },
+              "required": [
+                "calc_version",
+                "inputs"
+              ]
+            }
+          },
+          "required": [
+            "min_usd",
+            "max_usd",
+            "label",
+            "calc"
+          ]
+        },
+        "engagement_rate_30d": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "posts_per_week": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "match_reasons": {
+          "type": "array",
+          "description": "Why this creator (row 7858), each from a number the network holds: topic (the brand's segments the creator posts about; a topic match, not audience overlap), reach (median views a post over 30 days, with its as-of date), past_launches (launches posted about), engagement (only when above the median of the creators listed). Empty when none can be said; never a price.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "topic",
+                  "reach",
+                  "past_launches",
+                  "engagement"
+                ]
+              },
+              "text": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "kind",
+              "text"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "past_collabs": {
+          "type": "array",
+          "description": "Launches the creator posted or quoted among the launches the network tracks, newest first (at most 12), then detected paid partnerships. An empty list means none was found in the launches we track, not that the creator never worked with a brand.",
+          "items": {
+            "$ref": "#/$defs/ListedCollab"
+          }
+        },
+        "offerings": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Offering"
+          }
+        },
+        "synced_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "When the creator's profile and posts were last synced (ISO 8601). Null when unknown."
+        },
+        "refresh_failed_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time",
+          "description": "When the last nightly refresh of this creator failed (ISO 8601); null when the last refresh worked or none has run. The figures then stay as of synced_at."
+        },
+        "advice": {
+          "type": "object",
+          "properties": {
+            "recommended": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "enum": [
+                "post",
+                "quote",
+                null
+              ]
+            },
+            "reason": {
+              "type": "string"
+            }
+          }
+        },
+        "views_series": {
+          "type": "array",
+          "maxItems": 30,
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "description": "The shape of their recent posts' views, oldest first, at most 30 points, each 0 to 100 against the highest (a sparkline, not view counts: those are median_views_30d). A post without a views count is left out; empty when none has one."
+        }
+      }
+    },
+    "ListedCollab": {
+      "type": "object",
+      "description": "A collaboration in a list row: PastCollab without url (the creator's own post names them; DT-127).",
+      "required": [
+        "project",
+        "role"
+      ],
+      "properties": {
+        "project": {
+          "type": "string",
+          "description": "The project or brand."
+        },
+        "title": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "The launch's own title, when it says more than the project name."
+        },
+        "date": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date",
+          "description": "When the launch went out."
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "Launch post",
+            "Quoted the launch",
+            "Paid partnership"
+          ],
+          "description": "What the creator did."
+        },
+        "brand": {
+          "type": "object",
+          "description": "Who the launch was for, without a handle (a list names no X account): avatar_url, else the site's favicon, else initials.",
+          "properties": {
+            "avatar_url": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "site": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "initials": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "Offering": {
+      "type": "object",
+      "properties": {
+        "unit_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "format": {
+          "type": "string",
+          "enum": [
+            "post",
+            "quote",
+            "thread"
+          ]
+        },
+        "label": {
+          "type": "string"
+        },
+        "deliverable": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "One line on what the creator delivers for this format."
+        },
+        "price_cents": {
+          "type": "integer",
+          "description": "The one all-in price you pay, when buyable is true. When buyable is false this is the last price on file and is not bookable: a creator's price counts for 30 days, so an older one needs re-confirming (Ask for a price, creator_ask_price or POST /creators/{id}/price-request, asks our team for a current price)."
+        },
+        "buyable": {
+          "type": "boolean",
+          "description": "True when this format can be booked now at price_cents: the creator is approved and the price is current (at most 30 days old, or a price our team set). False means price on request until the price is re-confirmed."
+        },
+        "price_as_of": {
+          "type": "string",
+          "format": "date"
+        },
+        "expected_views": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "cost_per_1k_views_cents": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "provenance": {
+          "type": "object",
+          "description": "DT-159: where this number came from: source, method, measured_at, expires_at, label (Verified, Creator-reported or Estimated), stale, and as_of text.",
+          "properties": {
+            "source": {
+              "type": "string"
+            },
+            "method": {
+              "type": "string"
+            },
+            "measured_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "expires_at": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "label": {
+              "type": "string",
+              "enum": [
+                "Verified",
+                "Creator-reported",
+                "Estimated"
+              ]
+            },
+            "stale": {
+              "type": "boolean"
+            },
+            "as_of": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "calc": {
+          "type": "object",
+          "description": "How this number was made (DT-117): the calculation version and its inputs, the same on every surface. Never a cost or a fee.",
+          "properties": {
+            "calc_version": {
+              "type": "string"
+            },
+            "inputs": {
+              "type": "object"
+            }
+          },
+          "required": [
+            "calc_version",
+            "inputs"
+          ]
+        }
+      }
+    }
+  }
+}
